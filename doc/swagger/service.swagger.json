@@ -258,7 +258,8 @@
       "type": "object",
       "properties": {
         "productId": {
-          "type": "string"
+          "type": "string",
+          "format": "uint64"
         }
       }
     },
@@ -267,7 +268,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "user name"
+          "description": "user name, max length is 100 charaters"
         },
         "email": {
           "type": "string",
@@ -288,6 +289,7 @@
       "properties": {
         "userId": {
           "type": "string",
+          "format": "uint64",
           "description": "user id"
         }
       }
@@ -336,6 +338,7 @@
       "properties": {
         "id": {
           "type": "string",
+          "format": "uint64",
           "description": "product id"
         },
         "name": {

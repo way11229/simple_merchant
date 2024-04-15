@@ -5,5 +5,5 @@ package simple_merchant;
 option go_package = "github.com/way11229/simple_merchant";
 
 message DeleteUserByIdRequest {
-    string user_id = 1;
+    uint64 user_id = 1;
 }

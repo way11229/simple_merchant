@@ -13,7 +13,7 @@ message ListTheRecommendedProductsResponse {
 }
 
 message Product {
-    string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+    uint64 id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
         description: "product id",
     }];
     string name = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
