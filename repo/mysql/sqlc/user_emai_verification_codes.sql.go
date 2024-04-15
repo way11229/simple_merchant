@@ -28,7 +28,7 @@ INSERT INTO user_email_verification_codes (
 `
 
 type CreateUserEmailVerificationCodeParams struct {
-	UserID           []byte    `json:"user_id"`
+	UserID           int32     `json:"user_id"`
 	Email            string    `json:"email"`
 	VerificationCode string    `json:"verification_code"`
 	MaxTry           uint32    `json:"max_try"`
@@ -54,7 +54,7 @@ WHERE
     id = ?
 `
 
-func (q *Queries) DecreaseUserEmailVerificationCodeMaxTryById(ctx context.Context, id []byte) error {
+func (q *Queries) DecreaseUserEmailVerificationCodeMaxTryById(ctx context.Context, id int32) error {
 	_, err := q.exec(ctx, q.decreaseUserEmailVerificationCodeMaxTryByIdStmt, decreaseUserEmailVerificationCodeMaxTryById, id)
 	return err
 }
@@ -66,7 +66,7 @@ WHERE
     user_id = ?
 `
 
-func (q *Queries) DeleteUserEmailVerificationCodeByUserId(ctx context.Context, userID []byte) error {
+func (q *Queries) DeleteUserEmailVerificationCodeByUserId(ctx context.Context, userID int32) error {
 	_, err := q.exec(ctx, q.deleteUserEmailVerificationCodeByUserIdStmt, deleteUserEmailVerificationCodeByUserId, userID)
 	return err
 }
@@ -85,7 +85,7 @@ LIMIT
     1
 `
 
-func (q *Queries) GetLastCreatedUserEmailVerificationCodeByUserId(ctx context.Context, userID []byte) (UserEmailVerificationCode, error) {
+func (q *Queries) GetLastCreatedUserEmailVerificationCodeByUserId(ctx context.Context, userID int32) (UserEmailVerificationCode, error) {
 	row := q.queryRow(ctx, q.getLastCreatedUserEmailVerificationCodeByUserIdStmt, getLastCreatedUserEmailVerificationCodeByUserId, userID)
 	var i UserEmailVerificationCode
 	err := row.Scan(

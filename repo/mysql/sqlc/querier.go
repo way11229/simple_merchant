@@ -14,13 +14,13 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error)
 	CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt(ctx context.Context, arg CreateUserAuthOnDuplicateUpdateTokenAndExpiredAtParams) (sql.Result, error)
 	CreateUserEmailVerificationCode(ctx context.Context, arg CreateUserEmailVerificationCodeParams) (sql.Result, error)
-	DecreaseUserEmailVerificationCodeMaxTryById(ctx context.Context, id []byte) error
-	DeleteUserEmailVerificationCodeByUserId(ctx context.Context, userID []byte) error
-	GetLastCreatedUserEmailVerificationCodeByUserId(ctx context.Context, userID []byte) (UserEmailVerificationCode, error)
-	GetProductById(ctx context.Context, id []byte) (Product, error)
-	GetUserAuthByUserId(ctx context.Context, userID []byte) (UserAuth, error)
+	DecreaseUserEmailVerificationCodeMaxTryById(ctx context.Context, id int32) error
+	DeleteUserEmailVerificationCodeByUserId(ctx context.Context, userID int32) error
+	GetLastCreatedUserEmailVerificationCodeByUserId(ctx context.Context, userID int32) (UserEmailVerificationCode, error)
+	GetProductById(ctx context.Context, id int32) (Product, error)
+	GetUserAuthByUserId(ctx context.Context, userID int32) (UserAuth, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
-	GetUserById(ctx context.Context, id []byte) (User, error)
+	GetUserById(ctx context.Context, id int32) (User, error)
 	GetUserEmailVerificationCodeByEmailAndVerificationCode(ctx context.Context, arg GetUserEmailVerificationCodeByEmailAndVerificationCodeParams) (UserEmailVerificationCode, error)
 	ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]Product, error)
 }

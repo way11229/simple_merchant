@@ -27,7 +27,7 @@ ON DUPLICATE KEY UPDATE
 `
 
 type CreateUserAuthOnDuplicateUpdateTokenAndExpiredAtParams struct {
-	UserID      []byte    `json:"user_id"`
+	UserID      int32     `json:"user_id"`
 	Token       string    `json:"token"`
 	ExpiredAt   time.Time `json:"expired_at"`
 	Token_2     string    `json:"token_2"`
@@ -54,7 +54,7 @@ WHERE
     AND user_id = ?
 `
 
-func (q *Queries) GetUserAuthByUserId(ctx context.Context, userID []byte) (UserAuth, error) {
+func (q *Queries) GetUserAuthByUserId(ctx context.Context, userID int32) (UserAuth, error) {
 	row := q.queryRow(ctx, q.getUserAuthByUserIdStmt, getUserAuthByUserId, userID)
 	var i UserAuth
 	err := row.Scan(

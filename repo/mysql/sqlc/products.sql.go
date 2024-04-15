@@ -66,7 +66,7 @@ WHERE
     AND id = ?
 `
 
-func (q *Queries) GetProductById(ctx context.Context, id []byte) (Product, error) {
+func (q *Queries) GetProductById(ctx context.Context, id int32) (Product, error) {
 	row := q.queryRow(ctx, q.getProductByIdStmt, getProductById, id)
 	var i Product
 	err := row.Scan(

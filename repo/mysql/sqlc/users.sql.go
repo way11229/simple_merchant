@@ -67,7 +67,7 @@ WHERE
     AND id = ?
 `
 
-func (q *Queries) GetUserById(ctx context.Context, id []byte) (User, error) {
+func (q *Queries) GetUserById(ctx context.Context, id int32) (User, error) {
 	row := q.queryRow(ctx, q.getUserByIdStmt, getUserById, id)
 	var i User
 	err := row.Scan(
