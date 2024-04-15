@@ -254,6 +254,14 @@
         }
       }
     },
+    "simple_merchantCreateProductResponse": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "string"
+        }
+      }
+    },
     "simple_merchantCreateUserRequest": {
       "type": "object",
       "properties": {

@@ -2,6 +2,10 @@ syntax = "proto3";
 
 package simple_merchant;
 
+import "simple_merchant_delete_user_by_id.proto";
+import "simple_merchant_create_product.proto";
+import "simple_merchant_delete_product_by_id.proto";
+
 import "simple_merchant_create_user.proto";
 import "simple_merchant_get_user_email_verification_code.proto";
 import "simple_merchant_verify_user_email.proto";
@@ -31,6 +35,10 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service SimpleMerchant {
+    rpc DeleteUserById(DeleteUserByIdRequest) returns (google.protobuf.Empty) {}
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {}
+    rpc DeleteProductById(DeleteProductByIdRequest) returns (google.protobuf.Empty) {}
+
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
         option (google.api.http) = {
             post: "/users"

@@ -20,6 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	SimpleMerchant_DeleteUserById_FullMethodName               = "/simple_merchant.SimpleMerchant/DeleteUserById"
+	SimpleMerchant_CreateProduct_FullMethodName                = "/simple_merchant.SimpleMerchant/CreateProduct"
+	SimpleMerchant_DeleteProductById_FullMethodName            = "/simple_merchant.SimpleMerchant/DeleteProductById"
 	SimpleMerchant_CreateUser_FullMethodName                   = "/simple_merchant.SimpleMerchant/CreateUser"
 	SimpleMerchant_GetUserEmailVerificationCode_FullMethodName = "/simple_merchant.SimpleMerchant/GetUserEmailVerificationCode"
 	SimpleMerchant_VerifyUserEmail_FullMethodName              = "/simple_merchant.SimpleMerchant/VerifyUserEmail"
@@ -32,6 +35,9 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SimpleMerchantClient interface {
+	DeleteUserById(ctx context.Context, in *DeleteUserByIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	DeleteProductById(ctx context.Context, in *DeleteProductByIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	GetUserEmailVerificationCode(ctx context.Context, in *GetUserEmailVerificationCodeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	VerifyUserEmail(ctx context.Context, in *VerifyUserEmailRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -46,6 +52,33 @@ type simpleMerchantClient struct {
 
 func NewSimpleMerchantClient(cc grpc.ClientConnInterface) SimpleMerchantClient {
 	return &simpleMerchantClient{cc}
+}
+
+func (c *simpleMerchantClient) DeleteUserById(ctx context.Context, in *DeleteUserByIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, SimpleMerchant_DeleteUserById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *simpleMerchantClient) CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
+	out := new(CreateProductResponse)
+	err := c.cc.Invoke(ctx, SimpleMerchant_CreateProduct_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *simpleMerchantClient) DeleteProductById(ctx context.Context, in *DeleteProductByIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, SimpleMerchant_DeleteProductById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *simpleMerchantClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
@@ -106,6 +139,9 @@ func (c *simpleMerchantClient) ListTheRecommendedProducts(ctx context.Context, i
 // All implementations must embed UnimplementedSimpleMerchantServer
 // for forward compatibility
 type SimpleMerchantServer interface {
+	DeleteUserById(context.Context, *DeleteUserByIdRequest) (*emptypb.Empty, error)
+	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	DeleteProductById(context.Context, *DeleteProductByIdRequest) (*emptypb.Empty, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	GetUserEmailVerificationCode(context.Context, *GetUserEmailVerificationCodeRequest) (*emptypb.Empty, error)
 	VerifyUserEmail(context.Context, *VerifyUserEmailRequest) (*emptypb.Empty, error)
@@ -119,6 +155,15 @@ type SimpleMerchantServer interface {
 type UnimplementedSimpleMerchantServer struct {
 }
 
+func (UnimplementedSimpleMerchantServer) DeleteUserById(context.Context, *DeleteUserByIdRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserById not implemented")
+}
+func (UnimplementedSimpleMerchantServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
+}
+func (UnimplementedSimpleMerchantServer) DeleteProductById(context.Context, *DeleteProductByIdRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProductById not implemented")
+}
 func (UnimplementedSimpleMerchantServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
@@ -148,6 +193,60 @@ type UnsafeSimpleMerchantServer interface {
 
 func RegisterSimpleMerchantServer(s grpc.ServiceRegistrar, srv SimpleMerchantServer) {
 	s.RegisterService(&SimpleMerchant_ServiceDesc, srv)
+}
+
+func _SimpleMerchant_DeleteUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SimpleMerchantServer).DeleteUserById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SimpleMerchant_DeleteUserById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SimpleMerchantServer).DeleteUserById(ctx, req.(*DeleteUserByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SimpleMerchant_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SimpleMerchantServer).CreateProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SimpleMerchant_CreateProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SimpleMerchantServer).CreateProduct(ctx, req.(*CreateProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SimpleMerchant_DeleteProductById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProductByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SimpleMerchantServer).DeleteProductById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SimpleMerchant_DeleteProductById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SimpleMerchantServer).DeleteProductById(ctx, req.(*DeleteProductByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _SimpleMerchant_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -265,6 +364,18 @@ var SimpleMerchant_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "simple_merchant.SimpleMerchant",
 	HandlerType: (*SimpleMerchantServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "DeleteUserById",
+			Handler:    _SimpleMerchant_DeleteUserById_Handler,
+		},
+		{
+			MethodName: "CreateProduct",
+			Handler:    _SimpleMerchant_CreateProduct_Handler,
+		},
+		{
+			MethodName: "DeleteProductById",
+			Handler:    _SimpleMerchant_DeleteProductById_Handler,
+		},
 		{
 			MethodName: "CreateUser",
 			Handler:    _SimpleMerchant_CreateUser_Handler,
