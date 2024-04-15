@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package simple_merchant;
+
+import "simple_merchant_create_user.proto";
+import "simple_merchant_get_user_email_verification_code.proto";
+import "simple_merchant_verify_user_email.proto";
+import "simple_merchant_login_user.proto";
+import "simple_merchant_list_the_recommended_products.proto";
+
+// basic
+import "google/protobuf/empty.proto";
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/way11229/simple_merchant";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    host: "localhost:8080"
+    base_path: ""
+    info: {
+        title: "Simple Merchant Service API";
+        version: "1.0";
+        contact: {
+            name: "Way";
+            email: "way11229@gmail.com";
+        };
+        description: "Authorization with Bearer Token";
+    };
+};
+
+service SimpleMerchant {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/users"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "register a user";
+            description: "Add a new user to the simple merchant system.";
+        };
+    }
+
+    rpc GetUserEmailVerificationCode(GetUserEmailVerificationCodeRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            get: "/users/email/verification"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "get user email verificaiton code";
+            description: "Get user email verificaiton code. It can only be sent again every minute. Up to 5 times can be sent within 24 hours.";
+        };
+    }
+
+    rpc VerifyUserEmail(VerifyUserEmailRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            get: "/users/email/verify"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "verify user email";
+            description: "Verify user email with verification code";
+        };
+    }
+
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+        option (google.api.http) = {
+            post: "/users/login"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "login user";
+            description: "Login user then reture access token";
+        };
+    }
+
+    rpc LogoutUser (google.protobuf.Empty) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            get: "/users/logout"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "logout user";
+            description: "Logout user with the access token";
+            security: {
+                security_requirement: {
+                    key: "bearer";
+                    value: {}
+                }
+            }
+        };
+    }
+
+    rpc ListTheRecommendedProducts(google.protobuf.Empty) returns (ListTheRecommendedProductsResponse) {
+        option (google.api.http) = {
+            get: "/products/recommendation"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            summary: "list the recommended products";
+            description: "List the recommended products";
+            security: {
+                security_requirement: {
+                    key: "bearer";
+                    value: {}
+                }
+            }
+        };
+    }
+}

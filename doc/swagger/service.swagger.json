@@ -1,0 +1,344 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Simple Merchant Service API",
+    "description": "Authorization with Bearer Token",
+    "version": "1.0",
+    "contact": {
+      "name": "Way",
+      "email": "way11229@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "SimpleMerchant"
+    }
+  ],
+  "host": "localhost:8080",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/products/recommendation": {
+      "get": {
+        "summary": "list the recommended products",
+        "description": "List the recommended products",
+        "operationId": "SimpleMerchant_ListTheRecommendedProducts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/simple_merchantListTheRecommendedProductsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SimpleMerchant"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "register a user",
+        "description": "Add a new user to the simple merchant system.",
+        "operationId": "SimpleMerchant_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/simple_merchantCreateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/simple_merchantCreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SimpleMerchant"
+        ]
+      }
+    },
+    "/users/email/verification": {
+      "get": {
+        "summary": "get user email verificaiton code",
+        "description": "Get user email verificaiton code. It can only be sent again every minute. Up to 5 times can be sent within 24 hours.",
+        "operationId": "SimpleMerchant_GetUserEmailVerificationCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "description": "the email that will be verified",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SimpleMerchant"
+        ]
+      }
+    },
+    "/users/email/verify": {
+      "get": {
+        "summary": "verify user email",
+        "description": "Verify user email with verification code",
+        "operationId": "SimpleMerchant_VerifyUserEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "description": "the email that will be verified",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "verificationCode",
+            "description": "the email verification code",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SimpleMerchant"
+        ]
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "login user",
+        "description": "Login user then reture access token",
+        "operationId": "SimpleMerchant_LoginUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/simple_merchantLoginUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/simple_merchantLoginUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SimpleMerchant"
+        ]
+      }
+    },
+    "/users/logout": {
+      "get": {
+        "summary": "logout user",
+        "description": "Logout user with the access token",
+        "operationId": "SimpleMerchant_LogoutUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SimpleMerchant"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "simple_merchantCreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "user name"
+        },
+        "email": {
+          "type": "string",
+          "description": "user email"
+        },
+        "password": {
+          "type": "string",
+          "description": "user login password"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "simple_merchantCreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "user id"
+        }
+      }
+    },
+    "simple_merchantListTheRecommendedProductsResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/simple_merchantProduct"
+          },
+          "description": "the recommended products"
+        }
+      }
+    },
+    "simple_merchantLoginUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "user email"
+        },
+        "password": {
+          "type": "string",
+          "description": "user password"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "simple_merchantLoginUserResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "access email"
+        }
+      }
+    },
+    "simple_merchantProduct": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "product id"
+        },
+        "name": {
+          "type": "string",
+          "description": "product name"
+        },
+        "price": {
+          "type": "string",
+          "description": "product price"
+        }
+      }
+    }
+  }
+}
