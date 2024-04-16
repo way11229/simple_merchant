@@ -21,3 +21,4 @@
 go.work
 
 /tests/acceptance_tests/test_*.env
+/.vscode

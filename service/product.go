@@ -259,9 +259,11 @@ func (p *ProductService) listRecommendedProductsWithCacheAndDB(ctx context.Conte
 		return nil, err
 	}
 
-	go p.batchSetRecommendedProductsCache(context.Background(), &batchSetRecommendedProductsCacheParams{
-		Products: products,
-	})
+	if len(products) > 0 {
+		go p.batchSetRecommendedProductsCache(context.Background(), &batchSetRecommendedProductsCacheParams{
+			Products: products,
+		})
+	}
 
 	return products, nil
 }

@@ -2,6 +2,8 @@ package grpc
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 	"strings"
 	"time"
 
@@ -45,4 +47,22 @@ func (g *GrpcHandler) authorizedUser(ctx context.Context) (uint32, error) {
 	}
 
 	return resp.UserId, nil
+}
+
+func (g *GrpcHandler) PanicHandler(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if err := recover(); err != nil {
+				fmt.Printf("PanicHandler error = %v", err)
+
+				http.Error(
+					w,
+					`{"code": 13, "message": "Internal Server Error", "details": []}`,
+					http.StatusInternalServerError,
+				)
+			}
+		}()
+
+		h.ServeHTTP(w, r)
+	})
 }

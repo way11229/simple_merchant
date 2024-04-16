@@ -19,3 +19,29 @@ services:
     command: redis-server --requirepass 123456
     restart: always
 
+  simple_merchant:
+    image: simple_merchant:v1
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: simple_merchant
+    ports:
+      - 9000:9000 # for grpc
+      - 8080:8080 # for http 
+    environment:
+      MYSQL_SQL_DRIVER_NAME: "mysql"
+      MYSQL_SQL_DATA_SOURCE_NAME: "admin:admin_password@tcp(mysql:3306)/simple_merchant?charset=utf8&parseTime=true"
+      MYSQL_MIGRATION_SOURCE_URL: "file://mysql_migration"
+      MYSQL_MIGRATION_DATABASE_URL: "mysql://admin:admin_password@tcp(mysql:3306)/simple_merchant?multiStatements=true"
+      LOGIN_TOKEN_EXPIRE_SECONDS: 604800
+      USER_EMAIL_VERIFICATION_CODE_LEN: 6
+      USER_EMAIL_VERIFICATION_CODE_MAX_TRY: 5
+      USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS: 600
+      USER_EMAIL_VERIFICATION_CODE_ISSUE_LIMIT_SECONDS: 60
+      VERIFICATION_EMAIL_SUBJECT: "simple merchant user email verification code"
+      VERIFICATION_EMAIL_CONTENT: "your verification code: %s"
+      SYMMETRIC_KEY: "qMsW5S51A8ga1toJB0hgPl3I2r7dNHLL"
+      REDIS_ADDR: "redis:6379"
+      REDIS_PWD: "123456"
+      RECOMMENDED_PRODUCT_CACHE_EXPIRED_SECONDS: 600
+    restart: always

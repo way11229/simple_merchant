@@ -2,6 +2,7 @@ package mailer
 
 import (
 	"context"
+	"log"
 
 	"github.com/way11229/simple_merchant/domain"
 )
@@ -14,5 +15,6 @@ func NewMailer() domain.MailerClient {
 }
 
 func (m *Mailer) Send(ctx context.Context, input *domain.MailerClientSendParams) error {
+	log.Println("user email verification code: " + input.HtmlContent)
 	return nil
 }

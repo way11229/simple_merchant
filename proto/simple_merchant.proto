@@ -56,7 +56,7 @@ service SimpleMerchant {
         };
         option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
             summary: "get user email verificaiton code";
-            description: "Get user email verificaiton code. It can only be sent again every minute. Up to 5 times can be sent within 24 hours.";
+            description: "Get user email verificaiton code. It can only be sent again every minute.";
         };
     }
 

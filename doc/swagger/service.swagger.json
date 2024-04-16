@@ -88,7 +88,7 @@
     "/users/email/verification": {
       "get": {
         "summary": "get user email verificaiton code",
-        "description": "Get user email verificaiton code. It can only be sent again every minute. Up to 5 times can be sent within 24 hours.",
+        "description": "Get user email verificaiton code. It can only be sent again every minute.",
         "operationId": "SimpleMerchant_GetUserEmailVerificationCode",
         "responses": {
           "200": {
