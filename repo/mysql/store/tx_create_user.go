@@ -6,10 +6,11 @@ import (
 
 	"github.com/way11229/simple_merchant/domain"
 	mysql_sqlc "github.com/way11229/simple_merchant/repo/mysql/sqlc"
+	"github.com/way11229/simple_merchant/utils"
 )
 
-func (s *SqlStore) TxCreateUser(ctx context.Context, input *domain.MysqlTxCreateUserParams) (int64, error) {
-	var userId int64
+func (s *SqlStore) TxCreateUser(ctx context.Context, input *domain.MysqlTxCreateUserParams) (uint32, error) {
+	var userId uint32
 	err := s.execTx(ctx, func(q *mysql_sqlc.Queries) error {
 		createUserResp, err := q.CreateUser(ctx, input.CreateUserParams)
 		if err != nil {
@@ -17,9 +18,15 @@ func (s *SqlStore) TxCreateUser(ctx context.Context, input *domain.MysqlTxCreate
 			return domain.ErrUnknown
 		}
 
-		userId, err = createUserResp.LastInsertId()
+		lastInsertId, err := createUserResp.LastInsertId()
 		if err != nil {
 			log.Printf("LastInsertId error = %v", err)
+			return domain.ErrUnknown
+		}
+
+		userId, err = utils.ConvertInt64ToUint32(lastInsertId)
+		if err != nil {
+			log.Printf("ConvertInt64ToUint32 error = %v, params = %d", err, lastInsertId)
 			return domain.ErrUnknown
 		}
 

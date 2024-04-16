@@ -10,8 +10,13 @@ type MysqlTxCreateUserParams struct {
 	CreateUserParams mysql_sqlc.CreateUserParams
 }
 
+type MysqlTxDeleteUserParams struct {
+	UserId uint32
+}
+
 type MysqlStore interface {
 	mysql_sqlc.Querier
 
-	TxCreateUser(ctx context.Context, input *MysqlTxCreateUserParams) (int64, error)
+	TxCreateUser(ctx context.Context, input *MysqlTxCreateUserParams) (uint32, error)
+	TxDeleteUser(ctx context.Context, input *MysqlTxDeleteUserParams) error
 }

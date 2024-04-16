@@ -32,6 +32,18 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Res
 	return q.exec(ctx, q.createUserStmt, createUser, arg.Name, arg.Email, arg.Password)
 }
 
+const deleteUserById = `-- name: DeleteUserById :exec
+DELETE FROM
+   users 
+WHERE
+    id = ?
+`
+
+func (q *Queries) DeleteUserById(ctx context.Context, id uint32) error {
+	_, err := q.exec(ctx, q.deleteUserByIdStmt, deleteUserById, id)
+	return err
+}
+
 const getUserByEmail = `-- name: GetUserByEmail :one
 SELECT
     id, created_at, updated_at, name, email, email_verified_at, password
@@ -67,7 +79,7 @@ WHERE
     AND id = ?
 `
 
-func (q *Queries) GetUserById(ctx context.Context, id int32) (User, error) {
+func (q *Queries) GetUserById(ctx context.Context, id uint32) (User, error) {
 	row := q.queryRow(ctx, q.getUserByIdStmt, getUserById, id)
 	var i User
 	err := row.Scan(

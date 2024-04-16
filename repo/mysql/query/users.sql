@@ -29,3 +29,10 @@ WHERE
     1 = 1
     AND id = ?
 ;
+
+-- name: DeleteUserById :exec
+DELETE FROM
+   users 
+WHERE
+    id = ? 
+;

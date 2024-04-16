@@ -15,5 +15,5 @@ message CreateProductRequest {
 }
 
 message CreateProductResponse {
-    uint64 product_id = 1;
+    uint32 product_id = 1;
 }

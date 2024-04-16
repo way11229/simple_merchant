@@ -258,8 +258,8 @@
       "type": "object",
       "properties": {
         "productId": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -288,8 +288,8 @@
       "type": "object",
       "properties": {
         "userId": {
-          "type": "string",
-          "format": "uint64",
+          "type": "integer",
+          "format": "int64",
           "description": "user id"
         }
       }
@@ -337,8 +337,8 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "uint64",
+          "type": "integer",
+          "format": "int64",
           "description": "product id"
         },
         "name": {

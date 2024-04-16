@@ -12,7 +12,11 @@ import (
 )
 
 func (g *GrpcHandler) DeleteUserById(ctx context.Context, req *pb.DeleteUserByIdRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserById not implemented")
+	if err := g.userService.DeleteUserById(ctx, req.GetUserId()); err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	return &emptypb.Empty{}, nil
 }
 
 func (g *GrpcHandler) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
@@ -26,7 +30,7 @@ func (g *GrpcHandler) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	}
 
 	return &pb.CreateUserResponse{
-		UserId: uint64(resp.UserId),
+		UserId: resp.UserId,
 	}, nil
 }
 

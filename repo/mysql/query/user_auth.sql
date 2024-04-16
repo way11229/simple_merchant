@@ -23,3 +23,9 @@ WHERE
     AND user_id = ? 
 ;
 
+-- name: DeleteUserAuthByUserId :exec
+DELETE FROM
+   user_auth 
+WHERE
+    user_id = ? 
+;

@@ -54,7 +54,7 @@ func (ns NullProductsStatus) Value() (driver.Value, error) {
 }
 
 type Product struct {
-	ID int32 `json:"id"`
+	ID uint32 `json:"id"`
 	// created time
 	CreatedAt time.Time `json:"created_at"`
 	// updated time
@@ -81,7 +81,7 @@ type Product struct {
 }
 
 type User struct {
-	ID int32 `json:"id"`
+	ID uint32 `json:"id"`
 	// created time
 	CreatedAt time.Time `json:"created_at"`
 	// updated time
@@ -97,13 +97,13 @@ type User struct {
 }
 
 type UserAuth struct {
-	ID int32 `json:"id"`
+	ID uint32 `json:"id"`
 	// created time
 	CreatedAt time.Time `json:"created_at"`
 	// updated time
 	UpdatedAt time.Time `json:"updated_at"`
 	// user id
-	UserID int32 `json:"user_id"`
+	UserID uint32 `json:"user_id"`
 	// auth token
 	Token string `json:"token"`
 	// token expired time
@@ -111,13 +111,13 @@ type UserAuth struct {
 }
 
 type UserEmailVerificationCode struct {
-	ID int32 `json:"id"`
+	ID uint32 `json:"id"`
 	// created time
 	CreatedAt time.Time `json:"created_at"`
 	// updated time
 	UpdatedAt time.Time `json:"updated_at"`
 	// user id
-	UserID int32 `json:"user_id"`
+	UserID uint32 `json:"user_id"`
 	// user email
 	Email string `json:"email"`
 	// email verification code

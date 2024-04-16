@@ -27,7 +27,7 @@ ON DUPLICATE KEY UPDATE
 `
 
 type CreateUserAuthOnDuplicateUpdateTokenAndExpiredAtParams struct {
-	UserID      int32     `json:"user_id"`
+	UserID      uint32    `json:"user_id"`
 	Token       string    `json:"token"`
 	ExpiredAt   time.Time `json:"expired_at"`
 	Token_2     string    `json:"token_2"`
@@ -44,6 +44,18 @@ func (q *Queries) CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt(ctx context.C
 	)
 }
 
+const deleteUserAuthByUserId = `-- name: DeleteUserAuthByUserId :exec
+DELETE FROM
+   user_auth 
+WHERE
+    user_id = ?
+`
+
+func (q *Queries) DeleteUserAuthByUserId(ctx context.Context, userID uint32) error {
+	_, err := q.exec(ctx, q.deleteUserAuthByUserIdStmt, deleteUserAuthByUserId, userID)
+	return err
+}
+
 const getUserAuthByUserId = `-- name: GetUserAuthByUserId :one
 SELECT
     id, created_at, updated_at, user_id, token, expired_at
@@ -54,7 +66,7 @@ WHERE
     AND user_id = ?
 `
 
-func (q *Queries) GetUserAuthByUserId(ctx context.Context, userID int32) (UserAuth, error) {
+func (q *Queries) GetUserAuthByUserId(ctx context.Context, userID uint32) (UserAuth, error) {
 	row := q.queryRow(ctx, q.getUserAuthByUserIdStmt, getUserAuthByUserId, userID)
 	var i UserAuth
 	err := row.Scan(

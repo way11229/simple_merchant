@@ -89,6 +89,26 @@ func (u *UserService) CreateUser(ctx context.Context, input *domain.CreateUserPa
 	}, nil
 }
 
+func (u *UserService) DeleteUserById(ctx context.Context, userId uint32) error {
+	user, err := u.mysqlStore.GetUserById(ctx, userId)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return domain.ErrRecordNotFound
+		}
+
+		log.Printf("GetUserById error = %v, params = %d", err, userId)
+		return domain.ErrUnknown
+	}
+
+	if err := u.mysqlStore.TxDeleteUser(ctx, &domain.MysqlTxDeleteUserParams{
+		UserId: user.ID,
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 /********************
  ********************
  ** private method **

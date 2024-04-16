@@ -21,7 +21,7 @@ message CreateUserRequest {
 }
 
 message CreateUserResponse {
-    uint64 user_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+    uint32 user_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
         description: "user id",
     }];
 }

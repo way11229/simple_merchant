@@ -27,9 +27,10 @@ func (c *CreateUserParams) Validate() error {
 }
 
 type CreateUserResult struct {
-	UserId int64
+	UserId uint32
 }
 
 type UserService interface {
 	CreateUser(ctx context.Context, input *CreateUserParams) (*CreateUserResult, error)
+	DeleteUserById(ctx context.Context, userId uint32) error
 }

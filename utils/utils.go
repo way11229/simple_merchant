@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -23,4 +24,13 @@ func ConvertStringToUint(str string) (uint, error) {
 	}
 
 	return uint(i), nil
+}
+
+func ConvertInt64ToUint32(num int64) (uint32, error) {
+	rtn := uint32(num)
+	if int64(rtn) != num {
+		return 0, errors.New("overflow")
+	}
+
+	return rtn, nil
 }

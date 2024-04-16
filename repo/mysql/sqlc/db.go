@@ -39,6 +39,12 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.decreaseUserEmailVerificationCodeMaxTryByIdStmt, err = db.PrepareContext(ctx, decreaseUserEmailVerificationCodeMaxTryById); err != nil {
 		return nil, fmt.Errorf("error preparing query DecreaseUserEmailVerificationCodeMaxTryById: %w", err)
 	}
+	if q.deleteUserAuthByUserIdStmt, err = db.PrepareContext(ctx, deleteUserAuthByUserId); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteUserAuthByUserId: %w", err)
+	}
+	if q.deleteUserByIdStmt, err = db.PrepareContext(ctx, deleteUserById); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteUserById: %w", err)
+	}
 	if q.deleteUserEmailVerificationCodeByUserIdStmt, err = db.PrepareContext(ctx, deleteUserEmailVerificationCodeByUserId); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteUserEmailVerificationCodeByUserId: %w", err)
 	}
@@ -91,6 +97,16 @@ func (q *Queries) Close() error {
 	if q.decreaseUserEmailVerificationCodeMaxTryByIdStmt != nil {
 		if cerr := q.decreaseUserEmailVerificationCodeMaxTryByIdStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing decreaseUserEmailVerificationCodeMaxTryByIdStmt: %w", cerr)
+		}
+	}
+	if q.deleteUserAuthByUserIdStmt != nil {
+		if cerr := q.deleteUserAuthByUserIdStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteUserAuthByUserIdStmt: %w", cerr)
+		}
+	}
+	if q.deleteUserByIdStmt != nil {
+		if cerr := q.deleteUserByIdStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteUserByIdStmt: %w", cerr)
 		}
 	}
 	if q.deleteUserEmailVerificationCodeByUserIdStmt != nil {
@@ -177,6 +193,8 @@ type Queries struct {
 	createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt       *sql.Stmt
 	createUserEmailVerificationCodeStmt                        *sql.Stmt
 	decreaseUserEmailVerificationCodeMaxTryByIdStmt            *sql.Stmt
+	deleteUserAuthByUserIdStmt                                 *sql.Stmt
+	deleteUserByIdStmt                                         *sql.Stmt
 	deleteUserEmailVerificationCodeByUserIdStmt                *sql.Stmt
 	getLastCreatedUserEmailVerificationCodeByUserIdStmt        *sql.Stmt
 	getProductByIdStmt                                         *sql.Stmt
@@ -193,15 +211,17 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                tx,
 		createProductStmt: q.createProductStmt,
 		createUserStmt:    q.createUserStmt,
-		createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt: q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt,
-		createUserEmailVerificationCodeStmt:                  q.createUserEmailVerificationCodeStmt,
-		decreaseUserEmailVerificationCodeMaxTryByIdStmt:      q.decreaseUserEmailVerificationCodeMaxTryByIdStmt,
-		deleteUserEmailVerificationCodeByUserIdStmt:          q.deleteUserEmailVerificationCodeByUserIdStmt,
-		getLastCreatedUserEmailVerificationCodeByUserIdStmt:  q.getLastCreatedUserEmailVerificationCodeByUserIdStmt,
-		getProductByIdStmt:      q.getProductByIdStmt,
-		getUserAuthByUserIdStmt: q.getUserAuthByUserIdStmt,
-		getUserByEmailStmt:      q.getUserByEmailStmt,
-		getUserByIdStmt:         q.getUserByIdStmt,
+		createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt:       q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt,
+		createUserEmailVerificationCodeStmt:                        q.createUserEmailVerificationCodeStmt,
+		decreaseUserEmailVerificationCodeMaxTryByIdStmt:            q.decreaseUserEmailVerificationCodeMaxTryByIdStmt,
+		deleteUserAuthByUserIdStmt:                                 q.deleteUserAuthByUserIdStmt,
+		deleteUserByIdStmt:                                         q.deleteUserByIdStmt,
+		deleteUserEmailVerificationCodeByUserIdStmt:                q.deleteUserEmailVerificationCodeByUserIdStmt,
+		getLastCreatedUserEmailVerificationCodeByUserIdStmt:        q.getLastCreatedUserEmailVerificationCodeByUserIdStmt,
+		getProductByIdStmt:                                         q.getProductByIdStmt,
+		getUserAuthByUserIdStmt:                                    q.getUserAuthByUserIdStmt,
+		getUserByEmailStmt:                                         q.getUserByEmailStmt,
+		getUserByIdStmt:                                            q.getUserByIdStmt,
 		getUserEmailVerificationCodeByEmailAndVerificationCodeStmt: q.getUserEmailVerificationCodeByEmailAndVerificationCodeStmt,
 		listTheRecommendedProductsStmt:                             q.listTheRecommendedProductsStmt,
 	}
