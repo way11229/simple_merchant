@@ -10,3 +10,12 @@ services:
       MYSQL_USER: "admin"
       MYSQL_PASSWORD: "admin_password"
     restart: always
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: simple_merchant_redis
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass 123456
+    restart: always
+

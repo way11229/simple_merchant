@@ -15,12 +15,14 @@ import (
 
 	mailer "github.com/way11229/simple_merchant/repo/mailer"
 	mysql_store "github.com/way11229/simple_merchant/repo/mysql/store"
+	redis "github.com/way11229/simple_merchant/repo/redis"
 )
 
 type RepositoryClientGroup struct {
 	MysqlStore     domain.MysqlStore
 	Mailer         domain.MailerClient
 	AuthTokenMaker auth_token_maker.AuthTokenMaker
+	RedisClient    domain.RedisClient
 }
 
 func RunMysqlMigration(config *config.Config) {
@@ -61,6 +63,7 @@ func GetRepositoryClientGroup(
 		MysqlStore:     mysql_store.NewStore(mysqlConn),
 		Mailer:         mailer.NewMailer(),
 		AuthTokenMaker: pasetoMaker,
+		RedisClient:    redis.NewRedisClient(config.RedisAddr, config.RedisPwd),
 	}
 }
 
@@ -87,6 +90,8 @@ func GetServiceManagerWithRepositoryClientGroup(
 		),
 		ProductService: service.NewProductService(
 			repositoryClientGroup.MysqlStore,
+			repositoryClientGroup.RedisClient,
+			time.Duration(config.RecommendedProductCacheExpiredSeconds)*time.Second,
 		),
 	}
 }

@@ -2,6 +2,11 @@ package domain
 
 import "context"
 
+const (
+	RECOMMENDED_PRODUCT_CACHE_SORTED_SET_KEY_PREFIX = "zrp:"
+	RECOMMENDED_PRODUCT_CACHE_STRING_KEY_PREFIX     = "rp:"
+)
+
 type CreateProductParams struct {
 	Name             string
 	Description      string
@@ -33,9 +38,11 @@ type ListTheRecommendedProductsResult struct {
 }
 
 type RecommendedProduct struct {
-	Id    uint32
-	Name  string
-	Price uint32
+	Id    uint32 `json:"id"`
+	Name  string `json:"name"`
+	Price uint32 `json:"price"`
+
+	OrderBy int32
 }
 
 type ProductService interface {

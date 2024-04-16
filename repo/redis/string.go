@@ -32,3 +32,13 @@ func (r *RedisClient) Get(ctx context.Context, input *domain.GetParams) (string,
 
 	return resp, nil
 }
+
+func (r *RedisClient) Del(ctx context.Context, input *domain.DelParams) error {
+	_, err := r.rdb.Del(ctx, input.Keys...).Result()
+	if err != nil {
+		log.Printf("rdb.Del error = %v, params = %v", err, input.Keys)
+		return domain.ErrUnknown
+	}
+
+	return nil
+}

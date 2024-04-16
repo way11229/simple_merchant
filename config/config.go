@@ -22,6 +22,11 @@ type Config struct {
 	VerificationEmailContent string `mapstructure:"VERIFICATION_EMAIL_CONTENT"`
 
 	SymmetricKey string `mapstructure:"SYMMETRIC_KEY"`
+
+	RedisAddr string `mapstructure:"REDIS_ADDR"`
+	RedisPwd  string `mapstructure:"REDIS_PWD"`
+
+	RecommendedProductCacheExpiredSeconds uint `mapstructure:"RECOMMENDED_PRODUCT_CACHE_EXPIRED_SECONDS"`
 }
 
 func NewConfig() *Config {
@@ -41,6 +46,11 @@ func NewConfig() *Config {
 		VerificationEmailContent: utils.GetEnv("VERIFICATION_EMAIL_CONTENT"),
 
 		SymmetricKey: utils.GetEnv("SYMMETRIC_KEY"),
+
+		RedisAddr: utils.GetEnv("REDIS_ADDR"),
+		RedisPwd:  utils.GetEnv("REDIS_PWD"),
+
+		RecommendedProductCacheExpiredSeconds: convertStringToUintAndPanicIfError(utils.GetEnv("RECOMMENDED_PRODUCT_CACHE_EXPIRED_SECONDS")),
 	}
 }
 

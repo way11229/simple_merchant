@@ -41,6 +41,10 @@ type GetParams struct {
 	Key string
 }
 
+type DelParams struct {
+	Keys []string
+}
+
 type RedisClient interface {
 	SetExpiration(ctx context.Context, input *SetExpirationParams) error
 
@@ -52,4 +56,5 @@ type RedisClient interface {
 	// string
 	SetEx(ctx context.Context, input *SetExParams) error
 	Get(ctx context.Context, input *GetParams) (string, error)
+	Del(ctx context.Context, input *DelParams) error
 }
