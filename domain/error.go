@@ -16,4 +16,5 @@ var (
 	ErrVerificationCodeExpired           = errors.New("verification code expired")
 	ErrSendVerificationCodeInShortPeriod = errors.New("send verification code in short period")
 	ErrRecordNotFound                    = errors.New("record not found")
+	ErrEmailNotFound                     = errors.New("email not found")
 )

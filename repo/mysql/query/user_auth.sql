@@ -1,4 +1,4 @@
--- name: CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt :execresult
+-- name: CreateUserAuth :exec
 INSERT INTO user_auth (
     user_id,
     token,
@@ -8,9 +8,6 @@ INSERT INTO user_auth (
     ?,
     ?
 )
-ON DUPLICATE KEY UPDATE
-    token = ?,
-    expired_at = ?
 ;
 
 -- name: GetUserAuthByUserId :one
@@ -19,8 +16,18 @@ SELECT
 FROM
     user_auth
 WHERE
-    1 = 1
-    AND user_id = ? 
+    user_id = ? 
+;
+
+-- name: UpdateUserAuthById :exec
+UPDATE
+    user_auth
+SET
+    token = ?,
+    expired_at = ?,
+    updated_at = NOW()
+WHERE
+    id = ?
 ;
 
 -- name: DeleteUserAuthByUserId :exec

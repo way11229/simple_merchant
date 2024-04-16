@@ -11,13 +11,16 @@ type GrpcHandler struct {
 	pb.UnimplementedSimpleMerchantServer
 
 	userService domain.UserService
+	authService domain.AuthService
 }
 
 func NewGrpcHandler(
 	userService domain.UserService,
+	authService domain.AuthService,
 ) *GrpcHandler {
 	return &GrpcHandler{
 		userService: userService,
+		authService: authService,
 	}
 }
 
@@ -40,7 +43,8 @@ func (g *GrpcHandler) getResponseError(err error) error {
 		code = codes.Aborted
 	case domain.ErrUserEmailDuplicated:
 		code = codes.AlreadyExists
-	case domain.ErrRecordNotFound:
+	case domain.ErrRecordNotFound,
+		domain.ErrEmailNotFound:
 		code = codes.NotFound
 	default:
 		code = codes.Unknown

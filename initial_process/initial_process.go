@@ -6,8 +6,11 @@ import (
 	"time"
 
 	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/way11229/simple_merchant/config"
 	"github.com/way11229/simple_merchant/domain"
+	"github.com/way11229/simple_merchant/pkg/auth_token_maker"
 	"github.com/way11229/simple_merchant/service"
 
 	mailer "github.com/way11229/simple_merchant/repo/mailer"
@@ -15,23 +18,24 @@ import (
 )
 
 type RepositoryClientGroup struct {
-	MysqlStore domain.MysqlStore
-	Mailer     domain.MailerClient
+	MysqlStore     domain.MysqlStore
+	Mailer         domain.MailerClient
+	AuthTokenMaker auth_token_maker.AuthTokenMaker
 }
 
-func RunDbMigration(config *config.Config) {
-	migration, err := migrate.New(config.MigrationSourceURL, config.MigrationDatabaseURL)
+func RunMysqlMigration(config *config.Config) {
+	migration, err := migrate.New(config.MysqlMigrationSourceURL, config.MysqlMigrationDatabaseURL)
 	if err != nil {
-		log.Fatalf("cannot create new migrate instance, error: %v", err)
+		log.Fatalf("cannot create new mysql migrate instance, error: %v", err)
 	}
 
 	defer migration.Close()
 
 	if err = migration.Up(); err != nil && err != migrate.ErrNoChange {
-		log.Fatalf("failed to run migrate up, error: %v", err)
+		log.Fatalf("failed to run mysql migrate up, error: %v", err)
 	}
 
-	log.Println("db migrated successfully")
+	log.Println("mysql migrated successfully")
 }
 
 func GetServiceManager(
@@ -48,9 +52,15 @@ func GetRepositoryClientGroup(
 	config *config.Config,
 	mysqlConn *sql.DB,
 ) *RepositoryClientGroup {
+	pasetoMaker, err := auth_token_maker.NewPasetoMaker(config.SymmetricKey)
+	if err != nil {
+		log.Fatalf("NewPasetoMaker error = %v", err)
+	}
+
 	return &RepositoryClientGroup{
-		MysqlStore: mysql_store.NewStore(mysqlConn),
-		Mailer:     mailer.NewMailer(),
+		MysqlStore:     mysql_store.NewStore(mysqlConn),
+		Mailer:         mailer.NewMailer(),
+		AuthTokenMaker: pasetoMaker,
 	}
 }
 
@@ -69,6 +79,11 @@ func GetServiceManagerWithRepositoryClientGroup(
 			time.Duration(config.UserEmailVerificationCodeIssueLimitSeconds)*time.Second,
 			config.VerificationEmailSubject,
 			config.VerificationEmailContent,
+		),
+		AuthService: service.NewAuthService(
+			repositoryClientGroup.MysqlStore,
+			repositoryClientGroup.AuthTokenMaker,
+			time.Duration(config.LoginTokenExpireSeconds)*time.Second,
 		),
 	}
 }

@@ -1,0 +1,12 @@
+services:
+  mysql:
+    image: mysql:8.0.36
+    container_name: simple_merchant_mysql
+    ports: 
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "root_secret"
+      MYSQL_DATABASE: "simple_merchant"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin_password"
+    restart: always

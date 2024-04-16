@@ -16,8 +16,7 @@ SELECT
 FROM
     users
 WHERE
-    1 = 1
-    AND email = ?
+    email = ?
 ;
 
 -- name: GetUserById :one
@@ -26,13 +25,22 @@ SELECT
 FROM
     users
 WHERE
-    1 = 1
-    AND id = ?
+    id = ?
 ;
 
 -- name: DeleteUserById :exec
 DELETE FROM
    users 
+WHERE
+    id = ? 
+;
+
+-- name: VerifyUserEmailById :exec
+UPDATE
+    users
+SET
+    updated_at = NOW(),
+    email_verified_at = NOW()
 WHERE
     id = ? 
 ;

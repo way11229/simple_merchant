@@ -23,8 +23,8 @@ func server(ctx context.Context) (pb.SimpleMerchantClient, func()) {
 	testConfig := getTestConfigFromEnv()
 	accessToken = testConfig.AccessToken
 
-	initial_process.RunDbMigration(&testConfig.Config)
-	mysqlConn, err := sql.Open(testConfig.SqlDriverName, testConfig.SqlDataSourceName)
+	initial_process.RunMysqlMigration(&testConfig.Config)
+	mysqlConn, err := sql.Open(testConfig.MysqlSqlDriverName, testConfig.MysqlSqlDataSourceName)
 	if err != nil {
 		log.Fatalf("mysql connection error: %v", err)
 	}
@@ -78,6 +78,7 @@ func newGrpcHandler(
 
 	return handler_grpc.NewGrpcHandler(
 		serviceManager.UserService,
+		serviceManager.AuthService,
 	)
 }
 

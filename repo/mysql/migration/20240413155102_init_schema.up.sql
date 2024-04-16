@@ -14,7 +14,7 @@ CREATE TABLE `user_email_verification_codes` (
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
   `user_id` INTEGER UNSIGNED NOT NULL COMMENT 'user id',
   `email` VARCHAR(255) NOT NULL COMMENT 'user email',
-  `verification_code` varchar(255) NOT NULL COMMENT 'email verification code',
+  `verification_code` varchar(16) NOT NULL COMMENT 'email verification code',
   `max_try` INTEGER UNSIGNED NOT NULL COMMENT 'maximum number of verification attempts',
   `expired_at` TIMESTAMP NOT NULL COMMENT 'verification code expired time'
 );
@@ -24,7 +24,7 @@ CREATE TABLE `user_auth` (
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
   `user_id` INTEGER UNSIGNED NOT NULL COMMENT 'user id',
-  `token` VARCHAR(255) NOT NULL COMMENT 'auth token',
+  `token` VARCHAR(511) NOT NULL COMMENT 'auth token',
   `expired_at` TIMESTAMP NOT NULL COMMENT 'token expired time'
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE `products` (
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'updated time',
   `name` VARCHAR(255) NOT NULL COMMENT 'product name',
-  `description` TEXT NOT NULL DEFAULT '' COMMENT 'product description',
+  `description` TEXT NOT NULL COMMENT 'product description',
   `price` INTEGER UNSIGNED NOT NULL DEFAULT 0 COMMENT 'product price',
   `order_by` INTEGER NOT NULL DEFAULT 0 COMMENT 'product sorting',
   `is_recommendation` BOOL NOT NULL DEFAULT true COMMENT 'the product is recommendation',
@@ -42,7 +42,7 @@ CREATE TABLE `products` (
   `status` ENUM ('on', 'off') NOT NULL DEFAULT 'on' COMMENT '
 on: the product can be sold
 off: the product was discontinued
-'
+',
 
   CHECK (total_quantity >= sold_quantity)
 );

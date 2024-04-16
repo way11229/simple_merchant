@@ -45,7 +45,7 @@ func Test_createUser_getUserEmailVerificationCode_verifyUserEmail_loginUser_logo
 
 	if _, err := client.VerifyUserEmail(ctx, &pb.VerifyUserEmailRequest{
 		Email:            userData.Email,
-		VerificationCode: mailerClient.getVerificationCode(),
+		VerificationCode: mailerClient.GetVerificationCode(),
 	}); err != nil {
 		t.Fatalf("GetUserEmailVerificationCode error = %v", err)
 	}

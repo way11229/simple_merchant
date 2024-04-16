@@ -30,8 +30,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createUserStmt, err = db.PrepareContext(ctx, createUser); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateUser: %w", err)
 	}
-	if q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt, err = db.PrepareContext(ctx, createUserAuthOnDuplicateUpdateTokenAndExpiredAt); err != nil {
-		return nil, fmt.Errorf("error preparing query CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt: %w", err)
+	if q.createUserAuthStmt, err = db.PrepareContext(ctx, createUserAuth); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateUserAuth: %w", err)
 	}
 	if q.createUserEmailVerificationCodeStmt, err = db.PrepareContext(ctx, createUserEmailVerificationCode); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateUserEmailVerificationCode: %w", err)
@@ -69,6 +69,12 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.listTheRecommendedProductsStmt, err = db.PrepareContext(ctx, listTheRecommendedProducts); err != nil {
 		return nil, fmt.Errorf("error preparing query ListTheRecommendedProducts: %w", err)
 	}
+	if q.updateUserAuthByIdStmt, err = db.PrepareContext(ctx, updateUserAuthById); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateUserAuthById: %w", err)
+	}
+	if q.verifyUserEmailByIdStmt, err = db.PrepareContext(ctx, verifyUserEmailById); err != nil {
+		return nil, fmt.Errorf("error preparing query VerifyUserEmailById: %w", err)
+	}
 	return &q, nil
 }
 
@@ -84,9 +90,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing createUserStmt: %w", cerr)
 		}
 	}
-	if q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt != nil {
-		if cerr := q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt: %w", cerr)
+	if q.createUserAuthStmt != nil {
+		if cerr := q.createUserAuthStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createUserAuthStmt: %w", cerr)
 		}
 	}
 	if q.createUserEmailVerificationCodeStmt != nil {
@@ -149,6 +155,16 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing listTheRecommendedProductsStmt: %w", cerr)
 		}
 	}
+	if q.updateUserAuthByIdStmt != nil {
+		if cerr := q.updateUserAuthByIdStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateUserAuthByIdStmt: %w", cerr)
+		}
+	}
+	if q.verifyUserEmailByIdStmt != nil {
+		if cerr := q.verifyUserEmailByIdStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing verifyUserEmailByIdStmt: %w", cerr)
+		}
+	}
 	return err
 }
 
@@ -190,7 +206,7 @@ type Queries struct {
 	tx                                                         *sql.Tx
 	createProductStmt                                          *sql.Stmt
 	createUserStmt                                             *sql.Stmt
-	createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt       *sql.Stmt
+	createUserAuthStmt                                         *sql.Stmt
 	createUserEmailVerificationCodeStmt                        *sql.Stmt
 	decreaseUserEmailVerificationCodeMaxTryByIdStmt            *sql.Stmt
 	deleteUserAuthByUserIdStmt                                 *sql.Stmt
@@ -203,16 +219,18 @@ type Queries struct {
 	getUserByIdStmt                                            *sql.Stmt
 	getUserEmailVerificationCodeByEmailAndVerificationCodeStmt *sql.Stmt
 	listTheRecommendedProductsStmt                             *sql.Stmt
+	updateUserAuthByIdStmt                                     *sql.Stmt
+	verifyUserEmailByIdStmt                                    *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db:                tx,
-		tx:                tx,
-		createProductStmt: q.createProductStmt,
-		createUserStmt:    q.createUserStmt,
-		createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt:       q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt,
-		createUserEmailVerificationCodeStmt:                        q.createUserEmailVerificationCodeStmt,
+		db:                                  tx,
+		tx:                                  tx,
+		createProductStmt:                   q.createProductStmt,
+		createUserStmt:                      q.createUserStmt,
+		createUserAuthStmt:                  q.createUserAuthStmt,
+		createUserEmailVerificationCodeStmt: q.createUserEmailVerificationCodeStmt,
 		decreaseUserEmailVerificationCodeMaxTryByIdStmt:            q.decreaseUserEmailVerificationCodeMaxTryByIdStmt,
 		deleteUserAuthByUserIdStmt:                                 q.deleteUserAuthByUserIdStmt,
 		deleteUserByIdStmt:                                         q.deleteUserByIdStmt,
@@ -224,5 +242,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getUserByIdStmt:                                            q.getUserByIdStmt,
 		getUserEmailVerificationCodeByEmailAndVerificationCodeStmt: q.getUserEmailVerificationCodeByEmailAndVerificationCodeStmt,
 		listTheRecommendedProductsStmt:                             q.listTheRecommendedProductsStmt,
+		updateUserAuthByIdStmt:                                     q.updateUserAuthByIdStmt,
+		verifyUserEmailByIdStmt:                                    q.verifyUserEmailByIdStmt,
 	}
 }

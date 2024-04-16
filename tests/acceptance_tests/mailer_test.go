@@ -22,6 +22,6 @@ func (t *testMailerClient) Send(ctx context.Context, input *domain.MailerClientS
 	return nil
 }
 
-func (t *testMailerClient) getVerificationCode() string {
+func (t *testMailerClient) GetVerificationCode() string {
 	return t.verificationCode
 }

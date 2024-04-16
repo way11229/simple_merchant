@@ -30,7 +30,39 @@ type CreateUserResult struct {
 	UserId uint32
 }
 
+type GetUserEmailVerificationCodeParams struct {
+	Email string
+}
+
+func (g *GetUserEmailVerificationCodeParams) Validate() error {
+	if len(g.Email) == 0 || !ValidateEmail(g.Email) {
+		return ErrInvalidEmail
+	}
+
+	return nil
+}
+
+type VerifyUserEmailParams struct {
+	Email                 string
+	EmailVerificationCode string
+	GetNowTimeFunc        FuncTimeType
+}
+
+func (g *VerifyUserEmailParams) Validate() error {
+	if len(g.Email) == 0 || !ValidateEmail(g.Email) {
+		return ErrInvalidEmail
+	}
+
+	if len(g.EmailVerificationCode) == 0 {
+		return ErrInvalidVerificationCode
+	}
+
+	return nil
+}
+
 type UserService interface {
 	CreateUser(ctx context.Context, input *CreateUserParams) (*CreateUserResult, error)
 	DeleteUserById(ctx context.Context, userId uint32) error
+	GetUserEmailVerificationCode(ctx context.Context, input *GetUserEmailVerificationCodeParams) error
+	VerifyUserEmail(ctx context.Context, input *VerifyUserEmailParams) error
 }

@@ -7,11 +7,10 @@ package sqlc
 
 import (
 	"context"
-	"database/sql"
 	"time"
 )
 
-const createUserAuthOnDuplicateUpdateTokenAndExpiredAt = `-- name: CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt :execresult
+const createUserAuth = `-- name: CreateUserAuth :exec
 INSERT INTO user_auth (
     user_id,
     token,
@@ -21,27 +20,17 @@ INSERT INTO user_auth (
     ?,
     ?
 )
-ON DUPLICATE KEY UPDATE
-    token = ?,
-    expired_at = ?
 `
 
-type CreateUserAuthOnDuplicateUpdateTokenAndExpiredAtParams struct {
-	UserID      uint32    `json:"user_id"`
-	Token       string    `json:"token"`
-	ExpiredAt   time.Time `json:"expired_at"`
-	Token_2     string    `json:"token_2"`
-	ExpiredAt_2 time.Time `json:"expired_at_2"`
+type CreateUserAuthParams struct {
+	UserID    uint32    `json:"user_id"`
+	Token     string    `json:"token"`
+	ExpiredAt time.Time `json:"expired_at"`
 }
 
-func (q *Queries) CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt(ctx context.Context, arg CreateUserAuthOnDuplicateUpdateTokenAndExpiredAtParams) (sql.Result, error) {
-	return q.exec(ctx, q.createUserAuthOnDuplicateUpdateTokenAndExpiredAtStmt, createUserAuthOnDuplicateUpdateTokenAndExpiredAt,
-		arg.UserID,
-		arg.Token,
-		arg.ExpiredAt,
-		arg.Token_2,
-		arg.ExpiredAt_2,
-	)
+func (q *Queries) CreateUserAuth(ctx context.Context, arg CreateUserAuthParams) error {
+	_, err := q.exec(ctx, q.createUserAuthStmt, createUserAuth, arg.UserID, arg.Token, arg.ExpiredAt)
+	return err
 }
 
 const deleteUserAuthByUserId = `-- name: DeleteUserAuthByUserId :exec
@@ -62,8 +51,7 @@ SELECT
 FROM
     user_auth
 WHERE
-    1 = 1
-    AND user_id = ?
+    user_id = ?
 `
 
 func (q *Queries) GetUserAuthByUserId(ctx context.Context, userID uint32) (UserAuth, error) {
@@ -78,4 +66,26 @@ func (q *Queries) GetUserAuthByUserId(ctx context.Context, userID uint32) (UserA
 		&i.ExpiredAt,
 	)
 	return i, err
+}
+
+const updateUserAuthById = `-- name: UpdateUserAuthById :exec
+UPDATE
+    user_auth
+SET
+    token = ?,
+    expired_at = ?,
+    updated_at = NOW()
+WHERE
+    id = ?
+`
+
+type UpdateUserAuthByIdParams struct {
+	Token     string    `json:"token"`
+	ExpiredAt time.Time `json:"expired_at"`
+	ID        uint32    `json:"id"`
+}
+
+func (q *Queries) UpdateUserAuthById(ctx context.Context, arg UpdateUserAuthByIdParams) error {
+	_, err := q.exec(ctx, q.updateUserAuthByIdStmt, updateUserAuthById, arg.Token, arg.ExpiredAt, arg.ID)
+	return err
 }

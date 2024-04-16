@@ -2,9 +2,8 @@ package grpc
 
 import (
 	"context"
+	"time"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/way11229/simple_merchant/domain"
@@ -35,17 +34,52 @@ func (g *GrpcHandler) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 }
 
 func (g *GrpcHandler) GetUserEmailVerificationCode(ctx context.Context, req *pb.GetUserEmailVerificationCodeRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserEmailVerificationCode not implemented")
+	if err := g.userService.GetUserEmailVerificationCode(ctx, &domain.GetUserEmailVerificationCodeParams{
+		Email: req.GetEmail(),
+	}); err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	return &emptypb.Empty{}, nil
 }
 
 func (g *GrpcHandler) VerifyUserEmail(ctx context.Context, req *pb.VerifyUserEmailRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VerifyUserEmail not implemented")
+	if err := g.userService.VerifyUserEmail(ctx, &domain.VerifyUserEmailParams{
+		Email:                 req.GetEmail(),
+		EmailVerificationCode: req.GetVerificationCode(),
+		GetNowTimeFunc:        time.Now,
+	}); err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	return &emptypb.Empty{}, nil
 }
 
 func (g *GrpcHandler) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+	resp, err := g.authService.LoginUser(ctx, &domain.LoginUserParams{
+		Email:    req.GetEmail(),
+		Password: req.GetPassword(),
+	})
+	if err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	return &pb.LoginUserResponse{
+		Token: resp.Token,
+	}, nil
 }
 
 func (g *GrpcHandler) LogoutUser(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LogoutUser not implemented")
+	userId, err := g.authorizedUser(ctx)
+	if err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	if err := g.authService.LogoutUser(ctx, &domain.LogoutUserParams{
+		UserId: userId,
+	}); err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	return &emptypb.Empty{}, nil
 }

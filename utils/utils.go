@@ -1,11 +1,14 @@
 package utils
 
 import (
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"os"
 	"strconv"
 )
+
+const NUMBER_CHARS = "1234567890"
 
 // return $KEY from environment variable, panic if $KEY not found
 func GetEnv(key string) string {
@@ -33,4 +36,19 @@ func ConvertInt64ToUint32(num int64) (uint32, error) {
 	}
 
 	return rtn, nil
+}
+
+func GenerateRandomCode(length uint) (string, error) {
+	buf := make([]byte, length)
+	_, err := rand.Read(buf)
+	if err != nil {
+		return "", err
+	}
+
+	codeCharsLength := len(NUMBER_CHARS)
+	for i := uint(0); i < length; i++ {
+		buf[i] = NUMBER_CHARS[int(buf[i])%codeCharsLength]
+	}
+
+	return string(buf), nil
 }

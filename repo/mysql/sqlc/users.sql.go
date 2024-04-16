@@ -50,8 +50,7 @@ SELECT
 FROM
     users
 WHERE
-    1 = 1
-    AND email = ?
+    email = ?
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -75,8 +74,7 @@ SELECT
 FROM
     users
 WHERE
-    1 = 1
-    AND id = ?
+    id = ?
 `
 
 func (q *Queries) GetUserById(ctx context.Context, id uint32) (User, error) {
@@ -92,4 +90,19 @@ func (q *Queries) GetUserById(ctx context.Context, id uint32) (User, error) {
 		&i.Password,
 	)
 	return i, err
+}
+
+const verifyUserEmailById = `-- name: VerifyUserEmailById :exec
+UPDATE
+    users
+SET
+    updated_at = NOW(),
+    email_verified_at = NOW()
+WHERE
+    id = ?
+`
+
+func (q *Queries) VerifyUserEmailById(ctx context.Context, id uint32) error {
+	_, err := q.exec(ctx, q.verifyUserEmailByIdStmt, verifyUserEmailById, id)
+	return err
 }

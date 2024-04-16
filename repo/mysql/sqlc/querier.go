@@ -12,8 +12,8 @@ import (
 type Querier interface {
 	CreateProduct(ctx context.Context, arg CreateProductParams) (sql.Result, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error)
-	CreateUserAuthOnDuplicateUpdateTokenAndExpiredAt(ctx context.Context, arg CreateUserAuthOnDuplicateUpdateTokenAndExpiredAtParams) (sql.Result, error)
-	CreateUserEmailVerificationCode(ctx context.Context, arg CreateUserEmailVerificationCodeParams) (sql.Result, error)
+	CreateUserAuth(ctx context.Context, arg CreateUserAuthParams) error
+	CreateUserEmailVerificationCode(ctx context.Context, arg CreateUserEmailVerificationCodeParams) error
 	DecreaseUserEmailVerificationCodeMaxTryById(ctx context.Context, id uint32) error
 	DeleteUserAuthByUserId(ctx context.Context, userID uint32) error
 	DeleteUserById(ctx context.Context, id uint32) error
@@ -25,6 +25,8 @@ type Querier interface {
 	GetUserById(ctx context.Context, id uint32) (User, error)
 	GetUserEmailVerificationCodeByEmailAndVerificationCode(ctx context.Context, arg GetUserEmailVerificationCodeByEmailAndVerificationCodeParams) (UserEmailVerificationCode, error)
 	ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]Product, error)
+	UpdateUserAuthById(ctx context.Context, arg UpdateUserAuthByIdParams) error
+	VerifyUserEmailById(ctx context.Context, id uint32) error
 }
 
 var _ Querier = (*Queries)(nil)

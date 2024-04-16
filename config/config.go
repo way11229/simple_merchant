@@ -7,10 +7,10 @@ import (
 )
 
 type Config struct {
-	SqlDriverName        string `mapstructure:"SQL_DRIVER_NAME"`
-	SqlDataSourceName    string `mapstructure:"SQL_DATA_SOURCE_NAME"`
-	MigrationSourceURL   string `mapstructure:"MIGRATION_SOURCE_URL"`
-	MigrationDatabaseURL string `mapstructure:"MIGRATION_DATABASE_URL"`
+	MysqlSqlDriverName        string `mapstructure:"MYSQL_SQL_DRIVER_NAME"`
+	MysqlSqlDataSourceName    string `mapstructure:"MYSQL_SQL_DATA_SOURCE_NAME"`
+	MysqlMigrationSourceURL   string `mapstructure:"MYSQL_MIGRATION_SOURCE_URL"`
+	MysqlMigrationDatabaseURL string `mapstructure:"MYSQL_MIGRATION_DATABASE_URL"`
 
 	LoginTokenExpireSeconds                    uint `mapstructure:"LOGIN_TOKEN_EXPIRE_SECONDS"`
 	UserEmailVerificationCodeLen               uint `mapstructure:"USER_EMAIL_VERIFICATION_CODE_LEN"`
@@ -20,14 +20,16 @@ type Config struct {
 
 	VerificationEmailSubject string `mapstructure:"VERIFICATION_EMAIL_SUBJECT"`
 	VerificationEmailContent string `mapstructure:"VERIFICATION_EMAIL_CONTENT"`
+
+	SymmetricKey string `mapstructure:"SYMMETRIC_KEY"`
 }
 
 func NewConfig() *Config {
 	return &Config{
-		SqlDriverName:        utils.GetEnv("SQL_DRIVER_NAME"),
-		SqlDataSourceName:    utils.GetEnv("SQL_DATA_SOURCE_NAME"),
-		MigrationSourceURL:   utils.GetEnv("MIGRATION_SOURCE_URL"),
-		MigrationDatabaseURL: utils.GetEnv("MIGRATION_DATABASE_URL"),
+		MysqlSqlDriverName:        utils.GetEnv("MYSQL_SQL_DRIVER_NAME"),
+		MysqlSqlDataSourceName:    utils.GetEnv("MYSQL_SQL_DATA_SOURCE_NAME"),
+		MysqlMigrationSourceURL:   utils.GetEnv("MYSQL_MIGRATION_SOURCE_URL"),
+		MysqlMigrationDatabaseURL: utils.GetEnv("MYSQL_MIGRATION_DATABASE_URL"),
 
 		LoginTokenExpireSeconds:                    convertStringToUintAndPanicIfError(utils.GetEnv("LOGIN_TOKEN_EXPIRE_SECONDS")),
 		UserEmailVerificationCodeLen:               convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_LEN")),
@@ -37,6 +39,8 @@ func NewConfig() *Config {
 
 		VerificationEmailSubject: utils.GetEnv("VERIFICATION_EMAIL_SUBJECT"),
 		VerificationEmailContent: utils.GetEnv("VERIFICATION_EMAIL_CONTENT"),
+
+		SymmetricKey: utils.GetEnv("SYMMETRIC_KEY"),
 	}
 }
 

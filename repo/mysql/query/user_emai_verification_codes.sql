@@ -1,4 +1,4 @@
--- name: CreateUserEmailVerificationCode :execresult
+-- name: CreateUserEmailVerificationCode :exec
 INSERT INTO user_email_verification_codes (
     user_id,
     email,

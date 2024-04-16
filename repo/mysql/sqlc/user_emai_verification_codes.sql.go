@@ -7,11 +7,10 @@ package sqlc
 
 import (
 	"context"
-	"database/sql"
 	"time"
 )
 
-const createUserEmailVerificationCode = `-- name: CreateUserEmailVerificationCode :execresult
+const createUserEmailVerificationCode = `-- name: CreateUserEmailVerificationCode :exec
 INSERT INTO user_email_verification_codes (
     user_id,
     email,
@@ -35,14 +34,15 @@ type CreateUserEmailVerificationCodeParams struct {
 	ExpiredAt        time.Time `json:"expired_at"`
 }
 
-func (q *Queries) CreateUserEmailVerificationCode(ctx context.Context, arg CreateUserEmailVerificationCodeParams) (sql.Result, error) {
-	return q.exec(ctx, q.createUserEmailVerificationCodeStmt, createUserEmailVerificationCode,
+func (q *Queries) CreateUserEmailVerificationCode(ctx context.Context, arg CreateUserEmailVerificationCodeParams) error {
+	_, err := q.exec(ctx, q.createUserEmailVerificationCodeStmt, createUserEmailVerificationCode,
 		arg.UserID,
 		arg.Email,
 		arg.VerificationCode,
 		arg.MaxTry,
 		arg.ExpiredAt,
 	)
+	return err
 }
 
 const decreaseUserEmailVerificationCodeMaxTryById = `-- name: DecreaseUserEmailVerificationCodeMaxTryById :exec
