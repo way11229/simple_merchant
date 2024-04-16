@@ -19,6 +19,9 @@ message LoginUserRequest {
 
 message LoginUserResponse {
     string token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
-        description: "access email",
+        description: "access token",
+    }];
+    bool emailHasVerified = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "the email has verified",
     }];
 }

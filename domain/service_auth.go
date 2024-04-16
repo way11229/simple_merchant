@@ -20,7 +20,8 @@ func (l *LoginUserParams) Validate() error {
 }
 
 type LoginUserResult struct {
-	Token string
+	Token            string
+	EmailHasVerified bool
 }
 
 type CheckAccessTokenParams struct {

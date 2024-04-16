@@ -329,7 +329,11 @@
       "properties": {
         "token": {
           "type": "string",
-          "description": "access email"
+          "description": "access token"
+        },
+        "emailHasVerified": {
+          "type": "boolean",
+          "description": "the email has verified"
         }
       }
     },

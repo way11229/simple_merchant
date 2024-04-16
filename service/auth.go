@@ -72,7 +72,8 @@ func (a *AuthService) LoginUser(ctx context.Context, input *domain.LoginUserPara
 	}
 
 	return &domain.LoginUserResult{
-		Token: token,
+		Token:            token,
+		EmailHasVerified: user.EmailVerifiedAt.Valid,
 	}, nil
 }
 

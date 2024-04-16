@@ -58,6 +58,10 @@ func Test_createUser_getUserEmailVerificationCode_verifyUserEmail_loginUser_logo
 		t.Fatalf("LoginUser error = %v", err)
 	}
 
+	if !loginResp.EmailHasVerified {
+		t.Fatal("the email has not verified")
+	}
+
 	ctxWithAuth := grpcMetadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+loginResp.Token)
 	_, err = client.LogoutUser(ctxWithAuth, &emptypb.Empty{})
 	if err != nil {

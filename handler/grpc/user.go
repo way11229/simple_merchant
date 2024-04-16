@@ -65,7 +65,8 @@ func (g *GrpcHandler) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 	}
 
 	return &pb.LoginUserResponse{
-		Token: resp.Token,
+		Token:            resp.Token,
+		EmailHasVerified: resp.EmailHasVerified,
 	}, nil
 }
 
