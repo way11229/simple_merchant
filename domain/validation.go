@@ -11,6 +11,8 @@ const (
 	USER_PASSWORD_MIN_LEN            = 6
 	USER_PASSWORD_MAX_LEN            = 16
 	USER_PASSWORD_SPECIAL_CHARACTERS = "()[]{}<>+-*/?,.:;\"'_\\|~`!@#$%^&="
+
+	PRODUCT_NAME_MAX_LEN = 200
 )
 
 func ValidateEmail(email string) bool {

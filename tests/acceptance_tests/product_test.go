@@ -48,7 +48,7 @@ func Test_createProduct_ListTheRecommendedProducts(t *testing.T) {
 	}
 
 	product := recommendedProductsResp.GetProducts()[0]
-	wantProduct := &pb.Product{
+	wantProduct := &pb.RecommendedProduct{
 		Id:    createProductResp.ProductId,
 		Name:  productData.Name,
 		Price: product.Price,

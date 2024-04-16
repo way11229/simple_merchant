@@ -15,6 +15,7 @@ type Querier interface {
 	CreateUserAuth(ctx context.Context, arg CreateUserAuthParams) error
 	CreateUserEmailVerificationCode(ctx context.Context, arg CreateUserEmailVerificationCodeParams) error
 	DecreaseUserEmailVerificationCodeMaxTryById(ctx context.Context, id uint32) error
+	DeleteProductById(ctx context.Context, id uint32) error
 	DeleteUserAuthByUserId(ctx context.Context, userID uint32) error
 	DeleteUserById(ctx context.Context, id uint32) error
 	DeleteUserEmailVerificationCodeByUserId(ctx context.Context, userID uint32) error
@@ -24,7 +25,7 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserById(ctx context.Context, id uint32) (User, error)
 	GetUserEmailVerificationCodeByEmailAndVerificationCode(ctx context.Context, arg GetUserEmailVerificationCodeByEmailAndVerificationCodeParams) (UserEmailVerificationCode, error)
-	ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]Product, error)
+	ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]ListTheRecommendedProductsRow, error)
 	UpdateUserAuthById(ctx context.Context, arg UpdateUserAuthByIdParams) error
 	VerifyUserEmailById(ctx context.Context, id uint32) error
 }

@@ -140,7 +140,6 @@ func (a *AuthService) getAccessToken(userId uint32) (string, error) {
 		return "", domain.ErrUnknown
 	}
 
-	fmt.Println(len(token))
 	return token, nil
 }
 

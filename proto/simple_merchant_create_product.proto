@@ -7,11 +7,11 @@ option go_package = "github.com/way11229/simple_merchant";
 message CreateProductRequest {
     string name = 1;
     string description = 2;
-    int64 price = 3;
+    uint32 price = 3;
     int32 order_by = 4;
     bool is_recommendation = 5;
-    int64 total_quantity = 6;
-    int64 sold_quantity = 7;
+    uint32 total_quantity = 6;
+    uint32 sold_quantity = 7;
 }
 
 message CreateProductResponse {

@@ -6,6 +6,7 @@ import "time"
 type FuncTimeType func() time.Time
 
 type ServiceManager struct {
-	UserService UserService
-	AuthService AuthService
+	UserService    UserService
+	AuthService    AuthService
+	ProductService ProductService
 }

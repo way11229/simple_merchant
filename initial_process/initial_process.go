@@ -85,5 +85,8 @@ func GetServiceManagerWithRepositoryClientGroup(
 			repositoryClientGroup.AuthTokenMaker,
 			time.Duration(config.LoginTokenExpireSeconds)*time.Second,
 		),
+		ProductService: service.NewProductService(
+			repositoryClientGroup.MysqlStore,
+		),
 	}
 }

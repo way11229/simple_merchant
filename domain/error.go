@@ -17,4 +17,5 @@ var (
 	ErrSendVerificationCodeInShortPeriod = errors.New("send verification code in short period")
 	ErrRecordNotFound                    = errors.New("record not found")
 	ErrEmailNotFound                     = errors.New("email not found")
+	ErrInvalidProductName                = errors.New("invalid product name")
 )

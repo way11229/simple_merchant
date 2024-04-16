@@ -22,7 +22,9 @@ INSERT INTO products (
 
 -- name: ListTheRecommendedProducts :many
 SELECT
-    *
+    id,
+    name,
+    price
 FROM
     products
 WHERE
@@ -45,4 +47,11 @@ FROM
 WHERE
     1 = 1
     AND id = ? 
+;
+
+-- name: DeleteProductById :exec
+DELETE FROM
+    products
+WHERE
+    id = ? 
 ;

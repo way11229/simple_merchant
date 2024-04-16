@@ -90,14 +90,14 @@ func (u *UserService) CreateUser(ctx context.Context, input *domain.CreateUserPa
 	}, nil
 }
 
-func (u *UserService) DeleteUserById(ctx context.Context, userId uint32) error {
-	user, err := u.mysqlStore.GetUserById(ctx, userId)
+func (u *UserService) DeleteUserById(ctx context.Context, input *domain.DeleteUserByIdParams) error {
+	user, err := u.mysqlStore.GetUserById(ctx, input.UserId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return domain.ErrRecordNotFound
 		}
 
-		log.Printf("GetUserById error = %v, params = %d", err, userId)
+		log.Printf("GetUserById error = %v, params = %d", err, input.UserId)
 		return domain.ErrUnknown
 	}
 
@@ -201,8 +201,6 @@ func (u *UserService) encodeUserPassword(pwd string) (string, error) {
 		log.Println(err)
 		return "", domain.ErrUnknown
 	}
-
-	fmt.Println(len(encodePwd))
 
 	return encodePwd, nil
 }

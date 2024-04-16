@@ -30,6 +30,10 @@ type CreateUserResult struct {
 	UserId uint32
 }
 
+type DeleteUserByIdParams struct {
+	UserId uint32
+}
+
 type GetUserEmailVerificationCodeParams struct {
 	Email string
 }
@@ -62,7 +66,7 @@ func (g *VerifyUserEmailParams) Validate() error {
 
 type UserService interface {
 	CreateUser(ctx context.Context, input *CreateUserParams) (*CreateUserResult, error)
-	DeleteUserById(ctx context.Context, userId uint32) error
+	DeleteUserById(ctx context.Context, input *DeleteUserByIdParams) error
 	GetUserEmailVerificationCode(ctx context.Context, input *GetUserEmailVerificationCodeParams) error
 	VerifyUserEmail(ctx context.Context, input *VerifyUserEmailParams) error
 }

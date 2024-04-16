@@ -10,17 +10,20 @@ import (
 type GrpcHandler struct {
 	pb.UnimplementedSimpleMerchantServer
 
-	userService domain.UserService
-	authService domain.AuthService
+	userService    domain.UserService
+	authService    domain.AuthService
+	productService domain.ProductService
 }
 
 func NewGrpcHandler(
 	userService domain.UserService,
 	authService domain.AuthService,
+	productService domain.ProductService,
 ) *GrpcHandler {
 	return &GrpcHandler{
-		userService: userService,
-		authService: authService,
+		userService:    userService,
+		authService:    authService,
+		productService: productService,
 	}
 }
 
@@ -34,7 +37,8 @@ func (g *GrpcHandler) getResponseError(err error) error {
 		domain.ErrInvalidUserName,
 		domain.ErrInvalidEmail,
 		domain.ErrInvalidUserPassword,
-		domain.ErrEmailHasVerified:
+		domain.ErrEmailHasVerified,
+		domain.ErrInvalidProductName:
 		code = codes.InvalidArgument
 	case domain.ErrLoginAborted,
 		domain.ErrInvalidVerificationCode,

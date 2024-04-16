@@ -11,7 +11,9 @@ import (
 )
 
 func (g *GrpcHandler) DeleteUserById(ctx context.Context, req *pb.DeleteUserByIdRequest) (*emptypb.Empty, error) {
-	if err := g.userService.DeleteUserById(ctx, req.GetUserId()); err != nil {
+	if err := g.userService.DeleteUserById(ctx, &domain.DeleteUserByIdParams{
+		UserId: req.GetUserId(),
+	}); err != nil {
 		return nil, g.getResponseError(err)
 	}
 

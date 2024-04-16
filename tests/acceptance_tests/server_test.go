@@ -80,6 +80,7 @@ func newGrpcHandler(
 	return handler_grpc.NewGrpcHandler(
 		serviceManager.UserService,
 		serviceManager.AuthService,
+		serviceManager.ProductService,
 	)
 }
 

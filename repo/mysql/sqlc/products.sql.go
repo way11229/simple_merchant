@@ -56,6 +56,18 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (s
 	)
 }
 
+const deleteProductById = `-- name: DeleteProductById :exec
+DELETE FROM
+    products
+WHERE
+    id = ?
+`
+
+func (q *Queries) DeleteProductById(ctx context.Context, id uint32) error {
+	_, err := q.exec(ctx, q.deleteProductByIdStmt, deleteProductById, id)
+	return err
+}
+
 const getProductById = `-- name: GetProductById :one
 SELECT
     id, created_at, updated_at, name, description, price, order_by, is_recommendation, total_quantity, sold_quantity, status
@@ -87,7 +99,9 @@ func (q *Queries) GetProductById(ctx context.Context, id uint32) (Product, error
 
 const listTheRecommendedProducts = `-- name: ListTheRecommendedProducts :many
 SELECT
-    id, created_at, updated_at, name, description, price, order_by, is_recommendation, total_quantity, sold_quantity, status
+    id,
+    name,
+    price
 FROM
     products
 WHERE
@@ -107,28 +121,22 @@ type ListTheRecommendedProductsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]Product, error) {
+type ListTheRecommendedProductsRow struct {
+	ID    uint32 `json:"id"`
+	Name  string `json:"name"`
+	Price uint32 `json:"price"`
+}
+
+func (q *Queries) ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]ListTheRecommendedProductsRow, error) {
 	rows, err := q.query(ctx, q.listTheRecommendedProductsStmt, listTheRecommendedProducts, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Product{}
+	items := []ListTheRecommendedProductsRow{}
 	for rows.Next() {
-		var i Product
-		if err := rows.Scan(
-			&i.ID,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.Name,
-			&i.Description,
-			&i.Price,
-			&i.OrderBy,
-			&i.IsRecommendation,
-			&i.TotalQuantity,
-			&i.SoldQuantity,
-			&i.Status,
-		); err != nil {
+		var i ListTheRecommendedProductsRow
+		if err := rows.Scan(&i.ID, &i.Name, &i.Price); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

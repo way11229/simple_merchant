@@ -39,6 +39,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.decreaseUserEmailVerificationCodeMaxTryByIdStmt, err = db.PrepareContext(ctx, decreaseUserEmailVerificationCodeMaxTryById); err != nil {
 		return nil, fmt.Errorf("error preparing query DecreaseUserEmailVerificationCodeMaxTryById: %w", err)
 	}
+	if q.deleteProductByIdStmt, err = db.PrepareContext(ctx, deleteProductById); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteProductById: %w", err)
+	}
 	if q.deleteUserAuthByUserIdStmt, err = db.PrepareContext(ctx, deleteUserAuthByUserId); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteUserAuthByUserId: %w", err)
 	}
@@ -103,6 +106,11 @@ func (q *Queries) Close() error {
 	if q.decreaseUserEmailVerificationCodeMaxTryByIdStmt != nil {
 		if cerr := q.decreaseUserEmailVerificationCodeMaxTryByIdStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing decreaseUserEmailVerificationCodeMaxTryByIdStmt: %w", cerr)
+		}
+	}
+	if q.deleteProductByIdStmt != nil {
+		if cerr := q.deleteProductByIdStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteProductByIdStmt: %w", cerr)
 		}
 	}
 	if q.deleteUserAuthByUserIdStmt != nil {
@@ -209,6 +217,7 @@ type Queries struct {
 	createUserAuthStmt                                         *sql.Stmt
 	createUserEmailVerificationCodeStmt                        *sql.Stmt
 	decreaseUserEmailVerificationCodeMaxTryByIdStmt            *sql.Stmt
+	deleteProductByIdStmt                                      *sql.Stmt
 	deleteUserAuthByUserIdStmt                                 *sql.Stmt
 	deleteUserByIdStmt                                         *sql.Stmt
 	deleteUserEmailVerificationCodeByUserIdStmt                *sql.Stmt
@@ -232,6 +241,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		createUserAuthStmt:                  q.createUserAuthStmt,
 		createUserEmailVerificationCodeStmt: q.createUserEmailVerificationCodeStmt,
 		decreaseUserEmailVerificationCodeMaxTryByIdStmt:            q.decreaseUserEmailVerificationCodeMaxTryByIdStmt,
+		deleteProductByIdStmt:                                      q.deleteProductByIdStmt,
 		deleteUserAuthByUserIdStmt:                                 q.deleteUserAuthByUserIdStmt,
 		deleteUserByIdStmt:                                         q.deleteUserByIdStmt,
 		deleteUserEmailVerificationCodeByUserIdStmt:                q.deleteUserEmailVerificationCodeByUserIdStmt,

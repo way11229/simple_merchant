@@ -301,7 +301,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/simple_merchantProduct"
+            "$ref": "#/definitions/simple_merchantRecommendedProduct"
           },
           "description": "the recommended products"
         }
@@ -337,7 +337,7 @@
         }
       }
     },
-    "simple_merchantProduct": {
+    "simple_merchantRecommendedProduct": {
       "type": "object",
       "properties": {
         "id": {
@@ -350,7 +350,8 @@
           "description": "product name"
         },
         "price": {
-          "type": "string",
+          "type": "integer",
+          "format": "int64",
           "description": "product price"
         }
       }
