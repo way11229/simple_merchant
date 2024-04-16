@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-type MailerClientSend struct {
+type MailerClientSendParams struct {
 	Sender           *MailInfo
 	Receiver         *MailInfo
 	Subject          string
@@ -18,5 +18,5 @@ type MailInfo struct {
 }
 
 type MailerClient interface {
-	Send(ctx context.Context, input *MailerClientSend) error
+	Send(ctx context.Context, input *MailerClientSendParams) error
 }

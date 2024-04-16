@@ -6,6 +6,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/spf13/viper v1.18.2
+	golang.org/x/crypto v0.19.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240412170617-26222e5d3d56
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.33.0

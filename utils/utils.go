@@ -16,12 +16,11 @@ func GetEnv(key string) string {
 	return value
 }
 
-// convert string to uint, panic if convert error
-func ConvertStringToUint(str string) uint {
+func ConvertStringToUint(str string) (uint, error) {
 	i, err := strconv.ParseUint(str, 10, 32)
 	if err != nil {
-		panic(fmt.Sprintf("(%s): convert to uint error", str))
+		return 0, err
 	}
 
-	return uint(i)
+	return uint(i), nil
 }

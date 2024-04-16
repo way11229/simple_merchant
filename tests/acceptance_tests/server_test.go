@@ -69,9 +69,16 @@ func newGrpcHandler(
 	config *testConfig,
 	mysqlConn *sql.DB,
 ) *handler_grpc.GrpcHandler {
-	// repositoryClientGroup := initial_process.GetRepositoryClientGroup(&config.Config, mysqlConn)
-	// serviceManager := initial_process.GetServiceManagerWithRepositoryClientGroup(&config.Config, repositoryClientGroup)
-	return &handler_grpc.GrpcHandler{}
+	repositoryClientGroup := initial_process.GetRepositoryClientGroup(&config.Config, mysqlConn)
+
+	// just for test
+	repositoryClientGroup.Mailer = newTestMailerClient()
+
+	serviceManager := initial_process.GetServiceManagerWithRepositoryClientGroup(&config.Config, repositoryClientGroup)
+
+	return handler_grpc.NewGrpcHandler(
+		serviceManager.UserService,
+	)
 }
 
 func getTestConfigFromEnv() *testConfig {

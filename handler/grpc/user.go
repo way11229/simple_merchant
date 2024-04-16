@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
+	"github.com/way11229/simple_merchant/domain"
 	pb "github.com/way11229/simple_merchant/pb"
 )
 
@@ -15,7 +16,18 @@ func (g *GrpcHandler) DeleteUserById(ctx context.Context, req *pb.DeleteUserById
 }
 
 func (g *GrpcHandler) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+	resp, err := g.userService.CreateUser(ctx, &domain.CreateUserParams{
+		Name:     req.GetName(),
+		Email:    req.GetEmail(),
+		Password: req.GetPassword(),
+	})
+	if err != nil {
+		return nil, g.getResponseError(err)
+	}
+
+	return &pb.CreateUserResponse{
+		UserId: uint64(resp.UserId),
+	}, nil
 }
 
 func (g *GrpcHandler) GetUserEmailVerificationCode(ctx context.Context, req *pb.GetUserEmailVerificationCodeRequest) (*emptypb.Empty, error) {

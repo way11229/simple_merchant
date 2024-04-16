@@ -3,16 +3,20 @@ package initial_process
 import (
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/way11229/simple_merchant/config"
 	"github.com/way11229/simple_merchant/domain"
+	"github.com/way11229/simple_merchant/service"
 
+	mailer "github.com/way11229/simple_merchant/repo/mailer"
 	mysql_store "github.com/way11229/simple_merchant/repo/mysql/store"
 )
 
 type RepositoryClientGroup struct {
 	MysqlStore domain.MysqlStore
+	Mailer     domain.MailerClient
 }
 
 func RunDbMigration(config *config.Config) {
@@ -46,6 +50,7 @@ func GetRepositoryClientGroup(
 ) *RepositoryClientGroup {
 	return &RepositoryClientGroup{
 		MysqlStore: mysql_store.NewStore(mysqlConn),
+		Mailer:     mailer.NewMailer(),
 	}
 }
 
@@ -53,5 +58,17 @@ func GetServiceManagerWithRepositoryClientGroup(
 	config *config.Config,
 	repositoryClientGroup *RepositoryClientGroup,
 ) *domain.ServiceManager {
-	return &domain.ServiceManager{}
+	return &domain.ServiceManager{
+		UserService: service.NewUserService(
+			repositoryClientGroup.MysqlStore,
+			repositoryClientGroup.Mailer,
+			time.Duration(config.LoginTokenExpireSeconds)*time.Second,
+			config.UserEmailVerificationCodeLen,
+			config.UserEmailVerificationCodeMaxTry,
+			time.Duration(config.UserEmailVerificationCodeExpiredSeconds)*time.Second,
+			time.Duration(config.UserEmailVerificationCodeIssueLimitSeconds)*time.Second,
+			config.VerificationEmailSubject,
+			config.VerificationEmailContent,
+		),
+	}
 }

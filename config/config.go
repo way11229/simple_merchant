@@ -1,6 +1,10 @@
 package config
 
-import "github.com/way11229/simple_merchant/utils"
+import (
+	"fmt"
+
+	"github.com/way11229/simple_merchant/utils"
+)
 
 type Config struct {
 	SqlDriverName        string `mapstructure:"SQL_DRIVER_NAME"`
@@ -14,8 +18,8 @@ type Config struct {
 	UserEmailVerificationCodeExpiredSeconds    uint `mapstructure:"USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS"`
 	UserEmailVerificationCodeIssueLimitSeconds uint `mapstructure:"USER_EMAIL_VERIFICATION_CODE_ISSUE_LIMIT_SECONDS"`
 
-	VerifyEmailSubject string `mapstructure:"VERIFY_EMAIL_SUBJECT"`
-	VerifyEmailContent string `mapstructure:"VERIFY_EMAIL_CONTENT"`
+	VerificationEmailSubject string `mapstructure:"VERIFICATION_EMAIL_SUBJECT"`
+	VerificationEmailContent string `mapstructure:"VERIFICATION_EMAIL_CONTENT"`
 }
 
 func NewConfig() *Config {
@@ -25,13 +29,22 @@ func NewConfig() *Config {
 		MigrationSourceURL:   utils.GetEnv("MIGRATION_SOURCE_URL"),
 		MigrationDatabaseURL: utils.GetEnv("MIGRATION_DATABASE_URL"),
 
-		LoginTokenExpireSeconds:                    utils.ConvertStringToUint(utils.GetEnv("LOGIN_TOKEN_EXPIRE_SECONDS")),
-		UserEmailVerificationCodeLen:               utils.ConvertStringToUint(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_LEN")),
-		UserEmailVerificationCodeMaxTry:            utils.ConvertStringToUint(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_MAX_TRY")),
-		UserEmailVerificationCodeExpiredSeconds:    utils.ConvertStringToUint(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS")),
-		UserEmailVerificationCodeIssueLimitSeconds: utils.ConvertStringToUint(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_ISSUE_LIMIT_SECONDS")),
+		LoginTokenExpireSeconds:                    convertStringToUintAndPanicIfError(utils.GetEnv("LOGIN_TOKEN_EXPIRE_SECONDS")),
+		UserEmailVerificationCodeLen:               convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_LEN")),
+		UserEmailVerificationCodeMaxTry:            convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_MAX_TRY")),
+		UserEmailVerificationCodeExpiredSeconds:    convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS")),
+		UserEmailVerificationCodeIssueLimitSeconds: convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_ISSUE_LIMIT_SECONDS")),
 
-		VerifyEmailSubject: utils.GetEnv("VERIFY_EMAIL_SUBJECT"),
-		VerifyEmailContent: utils.GetEnv("VERIFY_EMAIL_CONTENT"),
+		VerificationEmailSubject: utils.GetEnv("VERIFICATION_EMAIL_SUBJECT"),
+		VerificationEmailContent: utils.GetEnv("VERIFICATION_EMAIL_CONTENT"),
 	}
+}
+
+func convertStringToUintAndPanicIfError(str string) uint {
+	rtn, err := utils.ConvertStringToUint(str)
+	if err != nil {
+		panic(fmt.Sprintf("ConvertStringToUint error = %v", err))
+	}
+
+	return rtn
 }

@@ -17,7 +17,7 @@ func newTestMailerClient() domain.MailerClient {
 	return mailerClient
 }
 
-func (t *testMailerClient) Send(ctx context.Context, input *domain.MailerClientSend) error {
+func (t *testMailerClient) Send(ctx context.Context, input *domain.MailerClientSendParams) error {
 	t.verificationCode = input.HtmlContent
 	return nil
 }
