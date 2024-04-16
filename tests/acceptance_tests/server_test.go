@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	grpcMetadata "google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/test/bufconn"
 
 	handler_grpc "github.com/way11229/simple_merchant/handler/grpc"
@@ -104,4 +105,8 @@ func getTestConfigFromEnv() *testConfig {
 	}
 
 	return &config
+}
+
+func getCtxWithAuth(ctx context.Context) context.Context {
+	return grpcMetadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+accessToken)
 }
