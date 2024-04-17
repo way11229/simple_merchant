@@ -68,6 +68,7 @@ Error List
 參數說明
 
 |  參數   | 說明  |
+|  ----  | ----  |
 |  MYSQL_SQL_DRIVER_NAME  |  sql mysql driver name  |
 |  MYSQL_SQL_DATA_SOURCE_NAME  |  sql mysql 連線資訊  |
 |  MYSQL_MIGRATION_SOURCE_URL  |  go migrate mysql schema 檔案路徑  |
