@@ -78,11 +78,16 @@ func Test_recommendedProductsSorting(t *testing.T) {
 			Name:             fmt.Sprintf("test_%d", i),
 			Description:      "test",
 			Price:            100,
-			OrderBy:          int32(i),
+			OrderBy:          0,
 			IsRecommendation: true,
 			TotalQuantity:    10,
 			SoldQuantity:     0,
 		}
+
+		if i == 10 {
+			productData.OrderBy = int32(i)
+		}
+
 		createProductResp, err := client.CreateProduct(ctx, productData)
 		if err != nil {
 			t.Fatalf("CreateProduct error = %v", err)
