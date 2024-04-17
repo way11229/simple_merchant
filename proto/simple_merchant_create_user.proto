@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package simple_merchant;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/way11229/simple_merchant";
+
+message CreateUserRequest {
+    string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "user name, max length is 100 charaters",
+    }];
+    string email = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "user email",
+        required: ["email"],
+    }];
+    string password = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "user login password",
+        required: ["password"],
+    }];
+}
+
+message CreateUserResponse {
+    uint32 user_id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "user id",
+    }];
+}

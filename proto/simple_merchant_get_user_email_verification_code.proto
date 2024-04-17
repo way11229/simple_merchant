@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package simple_merchant;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/way11229/simple_merchant";
+
+message GetUserEmailVerificationCodeRequest {
+    string email = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "the email that will be verified",
+        required: ["email"],
+    }];
+}

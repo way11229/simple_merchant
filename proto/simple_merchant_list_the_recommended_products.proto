@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package simple_merchant;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/way11229/simple_merchant";
+
+message ListTheRecommendedProductsResponse {
+    repeated RecommendedProduct products = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "the recommended products",
+    }];
+}
+
+message RecommendedProduct {
+    uint32 id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "product id",
+    }];
+    string name = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "product name",
+    }];
+    uint32 price = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+        description: "product price",
+    }];
+}

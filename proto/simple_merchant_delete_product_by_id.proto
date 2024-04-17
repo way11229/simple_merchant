@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package simple_merchant;
+
+option go_package = "github.com/way11229/simple_merchant";
+
+message DeleteProductByIdRequest {
+    uint32 product_id = 1;
+}
