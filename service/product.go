@@ -54,16 +54,18 @@ func (p *ProductService) CreateProduct(ctx context.Context, input *domain.Create
 		return nil, err
 	}
 
-	go p.batchSetRecommendedProductsCache(context.Background(), &batchSetRecommendedProductsCacheParams{
-		Products: []*domain.RecommendedProduct{
-			{
-				Id:      productId,
-				Name:    input.Name,
-				Price:   input.Price,
-				OrderBy: input.OrderBy,
+	if input.IsRecommendation {
+		go p.batchSetRecommendedProductsCache(context.Background(), &batchSetRecommendedProductsCacheParams{
+			Products: []*domain.RecommendedProduct{
+				{
+					Id:      productId,
+					Name:    input.Name,
+					Price:   input.Price,
+					OrderBy: input.OrderBy,
+				},
 			},
-		},
-	})
+		})
+	}
 
 	return &domain.CreateProductResult{
 		ProductId: productId,

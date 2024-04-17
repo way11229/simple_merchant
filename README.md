@@ -4,7 +4,7 @@
 
 ## API Document
 
-[API 文件](https://gitlab.com/way11229/simple_merchant/-/blob/main/doc/service.swagger.json?ref_type=heads)
+[API 文件](https://gitlab.com/way11229/simple_merchant/-/blob/main/doc/swagger/service.swagger.json)
 
 亦可參考./doc/swagger/service.swagger.json
 
@@ -90,3 +90,17 @@ Error List
 本專案於tests/acceptance_tests實做驗收測試，可依照需求，修改tests/acceptance_tests/test.env中的參數即可。
 
 因本專案有權限設計，故部份驗收測試需提供access token來執行，請將環境中測試帳號的access token填入test.env中的ACCESS_TOKEN。
+
+### Stress test
+
+因本專案取得推薦商品API預計每分鐘會有300次取用，故使用jmeter驗證其效能。
+
+CPU 2.90GHz × 16
+
+RAM 48G
+
+每分鐘300次請求
+![image](https://github.com/way11229/simple_merchant/blob/main/stress_test_300_60.png)
+
+每分鐘1000次請求
+![image](https://github.com/way11229/simple_merchant/blob/main/stress_test_1000_60.png)
