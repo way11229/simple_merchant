@@ -101,7 +101,8 @@ const listTheRecommendedProducts = `-- name: ListTheRecommendedProducts :many
 SELECT
     id,
     name,
-    price
+    price,
+    order_by
 FROM
     products
 WHERE
@@ -122,9 +123,10 @@ type ListTheRecommendedProductsParams struct {
 }
 
 type ListTheRecommendedProductsRow struct {
-	ID    uint32 `json:"id"`
-	Name  string `json:"name"`
-	Price uint32 `json:"price"`
+	ID      uint32 `json:"id"`
+	Name    string `json:"name"`
+	Price   uint32 `json:"price"`
+	OrderBy int32  `json:"order_by"`
 }
 
 func (q *Queries) ListTheRecommendedProducts(ctx context.Context, arg ListTheRecommendedProductsParams) ([]ListTheRecommendedProductsRow, error) {
@@ -136,7 +138,12 @@ func (q *Queries) ListTheRecommendedProducts(ctx context.Context, arg ListTheRec
 	items := []ListTheRecommendedProductsRow{}
 	for rows.Next() {
 		var i ListTheRecommendedProductsRow
-		if err := rows.Scan(&i.ID, &i.Name, &i.Price); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Price,
+			&i.OrderBy,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

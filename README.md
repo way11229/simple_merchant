@@ -74,6 +74,7 @@ Error List
 |  MYSQL_MIGRATION_SOURCE_URL  |  go migrate mysql schema 檔案路徑  |
 |  MYSQL_MIGRATION_DATABASE_URL  |  go migrate mysql 連線資訊 |
 |  LOGIN_TOKEN_EXPIRE_SECONDS  |  登入token過期時間（秒）  |
+|  LOGIN_TOKEN_CACHE_EXPIRE_SECONDS  |  登入token快取過期時間（秒）  |
 |  USER_EMAIL_VERIFICATION_CODE_LEN  |  使用者email驗證碼長度  |
 |  USER_EMAIL_VERIFICATION_CODE_MAX_TRY  |  使用者email驗證最多嘗試次數  |
 |  USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS  |  使用者email驗證碼過期時間（秒）  |
