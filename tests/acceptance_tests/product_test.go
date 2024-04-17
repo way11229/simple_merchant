@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 
 	pb "github.com/way11229/simple_merchant/pb"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -85,7 +86,7 @@ func Test_recommendedProductsSorting(t *testing.T) {
 		}
 
 		if i == 10 {
-			productData.OrderBy = int32(i)
+			productData.OrderBy = 99999
 		}
 
 		createProductResp, err := client.CreateProduct(ctx, productData)
@@ -109,6 +110,9 @@ func Test_recommendedProductsSorting(t *testing.T) {
 			}
 		}
 	}()
+
+	// waiting for cache
+	time.Sleep(time.Second)
 
 	ctxWithAuth := getCtxWithAuth(ctx)
 	recommendedProductsResp, err := client.ListTheRecommendedProducts(ctxWithAuth, &emptypb.Empty{})

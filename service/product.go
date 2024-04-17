@@ -55,16 +55,7 @@ func (p *ProductService) CreateProduct(ctx context.Context, input *domain.Create
 	}
 
 	if input.IsRecommendation {
-		go p.batchSetRecommendedProductsCache(context.Background(), &batchSetRecommendedProductsCacheParams{
-			Products: []*domain.RecommendedProduct{
-				{
-					Id:      productId,
-					Name:    input.Name,
-					Price:   input.Price,
-					OrderBy: input.OrderBy,
-				},
-			},
-		})
+		go p.refreshRecommendedProductsToCache(context.Background())
 	}
 
 	return &domain.CreateProductResult{
@@ -127,9 +118,10 @@ func (p *ProductService) batchListRecommendedProducts(ctx context.Context) ([]*d
 
 		for _, e := range products {
 			rtn = append(rtn, &domain.RecommendedProduct{
-				Id:    e.ID,
-				Name:  e.Name,
-				Price: e.Price,
+				Id:      e.ID,
+				Name:    e.Name,
+				Price:   e.Price,
+				OrderBy: e.OrderBy,
 			})
 		}
 
@@ -256,6 +248,10 @@ func (p *ProductService) listRecommendedProductsWithCacheAndDB(ctx context.Conte
 		return cacheProducts, nil
 	}
 
+	return p.refreshRecommendedProductsToCache(ctx)
+}
+
+func (p *ProductService) refreshRecommendedProductsToCache(ctx context.Context) ([]*domain.RecommendedProduct, error) {
 	products, err := p.batchListRecommendedProducts(ctx)
 	if err != nil {
 		return nil, err

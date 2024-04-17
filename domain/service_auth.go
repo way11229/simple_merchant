@@ -2,6 +2,10 @@ package domain
 
 import "context"
 
+const (
+	ACCESS_TOKEN_CACHE_KEY_PREFIX = "uat:"
+)
+
 type LoginUserParams struct {
 	Email    string
 	Password string

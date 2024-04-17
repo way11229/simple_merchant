@@ -13,6 +13,7 @@ type Config struct {
 	MysqlMigrationDatabaseURL string `mapstructure:"MYSQL_MIGRATION_DATABASE_URL"`
 
 	LoginTokenExpireSeconds                    uint `mapstructure:"LOGIN_TOKEN_EXPIRE_SECONDS"`
+	LoginTokenCacheExpireSeconds               uint `mapstructure:"LOGIN_TOKEN_CACHE_EXPIRE_SECONDS"`
 	UserEmailVerificationCodeLen               uint `mapstructure:"USER_EMAIL_VERIFICATION_CODE_LEN"`
 	UserEmailVerificationCodeMaxTry            uint `mapstructure:"USER_EMAIL_VERIFICATION_CODE_MAX_TRY"`
 	UserEmailVerificationCodeExpiredSeconds    uint `mapstructure:"USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS"`
@@ -37,6 +38,7 @@ func NewConfig() *Config {
 		MysqlMigrationDatabaseURL: utils.GetEnv("MYSQL_MIGRATION_DATABASE_URL"),
 
 		LoginTokenExpireSeconds:                    convertStringToUintAndPanicIfError(utils.GetEnv("LOGIN_TOKEN_EXPIRE_SECONDS")),
+		LoginTokenCacheExpireSeconds:               convertStringToUintAndPanicIfError(utils.GetEnv("LOGIN_TOKEN_CACHE_EXPIRE_SECONDS")),
 		UserEmailVerificationCodeLen:               convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_LEN")),
 		UserEmailVerificationCodeMaxTry:            convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_MAX_TRY")),
 		UserEmailVerificationCodeExpiredSeconds:    convertStringToUintAndPanicIfError(utils.GetEnv("USER_EMAIL_VERIFICATION_CODE_EXPIRED_SECONDS")),

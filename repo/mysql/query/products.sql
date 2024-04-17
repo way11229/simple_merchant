@@ -24,7 +24,8 @@ INSERT INTO products (
 SELECT
     id,
     name,
-    price
+    price,
+    order_by
 FROM
     products
 WHERE
