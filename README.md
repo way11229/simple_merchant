@@ -4,7 +4,7 @@
 
 ## API Document
 
-[API 文件](https://gitlab.com/way11229/simple_merchant/-/blob/main/doc/service.swagger.json?ref_type=heads)
+[API 文件](https://gitlab.com/way11229/simple_merchant/-/blob/main/doc/swagger/service.swagger.json)
 
 亦可參考./doc/swagger/service.swagger.json
 
