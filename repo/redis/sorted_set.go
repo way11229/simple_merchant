@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/redis/go-redis/v9"
@@ -17,7 +18,8 @@ func (r *RedisClient) ZAdd(ctx context.Context, input *domain.ZAddParams) error 
 		})
 	}
 
-	if err := r.rdb.ZAdd(ctx, input.Key, members...); err != nil {
+	if err := r.rdb.ZAdd(ctx, input.Key, members...).Err(); err != nil {
+		fmt.Println(input.Members[0])
 		log.Printf("ZAdd error = %v, params = %v", err, input)
 		return domain.ErrUnknown
 	}
@@ -26,7 +28,7 @@ func (r *RedisClient) ZAdd(ctx context.Context, input *domain.ZAddParams) error 
 }
 
 func (r *RedisClient) ZRem(ctx context.Context, input *domain.ZRemParams) error {
-	if err := r.rdb.ZRem(ctx, input.Key, input.Members...); err != nil {
+	if err := r.rdb.ZRem(ctx, input.Key, input.Members...).Err(); err != nil {
 		log.Printf("ZRem error = %v, params = %v", err, input)
 		return domain.ErrUnknown
 	}
